@@ -16,9 +16,6 @@ WORKDIR /app
 # Copy the rest of the application
 COPY ./api .
 
-# Copy the database migration files
-COPY ./database ./database
-
 # Build the Go application
 RUN go build -o main .
 

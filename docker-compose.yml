@@ -32,57 +32,57 @@ services:
       postgres:
         condition: service_healthy
 
-  # go:
-  #   container_name: goapi
-  #   build:
-  #     context: ./backend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "3000:3000"
-  #   env_file:
-  #     - .env
-  #   volumes:
-  #     - ./backend/api:/usr/src/app
-  #   networks:
-  #     - matcha
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
+  go:
+    container_name: goapi
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    volumes:
+      - ./backend/api:/usr/src/app
+    networks:
+      - matcha
+    depends_on:
+      postgres:
+        condition: service_healthy
 
-  # reactjs:
-  #   container_name: reactapp
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "8000:3000"
-  #   env_file:
-  #     - .env
-  #   volumes:
-  #     - ./frontend/app:/usr/src/app
-  #   networks:
-  #     - matcha
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
+  reactjs:
+    container_name: reactapp
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:3000"
+    env_file:
+      - .env
+    volumes:
+      - ./frontend/app:/usr/src/app
+    networks:
+      - matcha
+    depends_on:
+      postgres:
+        condition: service_healthy
 
 volumes:
   postgres:
     name: go-init-docker-db
-  # goapi:
-  #   name: goapi
-  #   driver: local
-  #   driver_opts:
-  #     type: 'none'
-  #     o: 'bind' 
-  #     device: '~/data/go'
-  # reactapp:
-  #   name: reactapp
-  #   driver: local
-  #   driver_opts:
-  #     type: 'none'
-  #     o: 'bind' 
-  #     device: '~/data/reactapp'
+  goapi:
+    name: goapi
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind' 
+      device: '~/data/go'
+  reactapp:
+    name: reactapp
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind' 
+      device: '~/data/reactapp'
 
 networks:
   matcha:
