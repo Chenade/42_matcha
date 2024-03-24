@@ -18,20 +18,19 @@ services:
       retries: 20
       start_period: 5s
   
-  nestjs:
-    container_name: nestapp
+  go:
+    container_name: go
     build:
       context: ./backend
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
-      - "5555:5555"
     env_file:
       - .env
     volumes:
       - ./backend/app:/usr/src/app
     networks:
-      - transendance
+      - matcha
     depends_on:
       postgres:
         condition: service_healthy
@@ -48,7 +47,7 @@ services:
     volumes:
       - ./frontend/app:/usr/src/app
     networks:
-      - transendance
+      - matcha
     depends_on:
       postgres:
         condition: service_healthy
@@ -56,13 +55,13 @@ services:
 volumes:
   postgres:
     name: nest-init-docker-db
-  nestapp:
-    name: nestapp
+  go:
+    name: go
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind' 
-      device: '~/data/nestapp'
+      device: '~/data/go'
   reactapp:
     name: reactapp
     driver: local
@@ -72,5 +71,5 @@ volumes:
       device: '~/data/reactapp'
 
 networks:
-  transendance:
-    name: transendance
+  matcha:
+    name: matcha

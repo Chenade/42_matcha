@@ -14,23 +14,23 @@ COPY ./app/package.json ./
 # Copy the rest of the app's source code to the container
 COPY ./app ./
 
-# RUN rm -rf node_modules
+RUN rm -rf node_modules
 
 # # Install dependencies
-# RUN npm install
+RUN npm install
 
 # # Build the app for production
 # RUN npm run build
-RUN npm install -g serve
+# RUN npm install -g serve
 
 # Copy the built app to the container
-COPY ./app/build ./build
+# COPY ./app/build ./build
 
-COPY ./db-check.sh /
+COPY ./app/db-check.sh /
 RUN chmod +x /db-check.sh
 
 # Expose port 3000 to the outside world
 EXPOSE 3000
 
 # Start the app when the container starts
-CMD ["/db-check.sh", "npm", "run", "start:prod"]
+CMD ["/db-check.sh", "npm", "run", "start"]
