@@ -8,8 +8,8 @@ import (
 	"goji.io/pat"
 
 	"api/handlers"
-    "api/utils"
 	"api/middleware"
+	"api/utils"
 )
 
 func main() {
@@ -21,9 +21,9 @@ func main() {
 	mux.HandleFunc(pat.Get("/hello/:name"), handlers.HelloName)
 
 	port := 3000
-	addr := fmt.Sprintf("localhost:%d", port)
+	addr := fmt.Sprintf("0.0.0.0:%d", port)
 
-    utils.Log(fmt.Sprintf("Server running on port %d", port))
+	utils.Log(fmt.Sprintf("Server running on port %d", port))
 
 	http.ListenAndServe(addr, mux)
 }

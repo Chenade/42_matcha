@@ -3,7 +3,7 @@ FROM golang:latest
 WORKDIR /api
 
 COPY ./api/go.mod ./api/go.sum ./
-# RUN go mod download
+RUN go mod download
 
 COPY ./api .
 
