@@ -2,10 +2,11 @@ import React, { useEffect } from 'react';
 import './page-navigation.css';
 import { Outlet } from 'react-router-dom';
 import { Navbar } from './Navbar';
+import type { PageTitle } from './Navbar';
 
 export const PageNavigation = () => {
 
-    const [pageTitle, setPageTitle] = React.useState('首頁');
+    const [pageTitle, setPageTitle] = React.useState<PageTitle>('page1 Title');
 
     useEffect(() => {
         return () => {
@@ -33,7 +34,7 @@ export const PageNavigation = () => {
         <>
             <header className="header" id="header" onClick={toggleClickHandler}>
                 <h1 id="header-toggle" style={{ fontSize: '1.8em' }}>{pageTitle}</h1>
-                <Navbar onChangePage={setPageTitle} />
+                <Navbar setPageTitle={setPageTitle} />
             </header>
             <div id="body-container">
                 <Outlet />
