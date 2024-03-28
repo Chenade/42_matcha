@@ -1,18 +1,30 @@
 
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
-import HomePage from './pages/homepage';
-import PageLogin from './pages/loginpage';
+import HomePage from './components/PagePlaceholder';
+import { PageLogin } from './components/login/PageLogin';
+import { PageNavigation } from './components/navigation/PageNavigation';
 
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <HomePage pageTitle="首頁" />,
+        element: <PageNavigation />,
         id: 'root',
         children: [
             {
+                path: '/page1',
                 index: true,
-                element: <HomePage pageTitle="首頁" />,
+                element: <HomePage test={1} />,
+            },
+            {
+                path: '/page2',
+                index: true,
+                element: <HomePage test={2} />,
+            },
+            {
+                path: '/page3',
+                index: true,
+                element: <HomePage test={3} />,
             },
         ],
     },
