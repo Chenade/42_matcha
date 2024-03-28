@@ -33,7 +33,7 @@ export const PageNavigation = () => {
         <>
             <header className="header" id="header" onClick={toggleClickHandler}>
                 <h1 id="header-toggle" style={{ fontSize: '1.8em' }}>{pageTitle}</h1>
-                <Navbar onChangePage={setPageTitle} />
+                <Navbar setPageTitle={setPageTitle} />
             </header>
             <div id="body-container">
                 <Outlet />

@@ -3,9 +3,9 @@ import './page-navigation.css';
 import { Link } from 'react-router-dom';
 
 export const Navbar = ({
-	onChangePage,
+	setPageTitle,
 }: {
-	onChangePage: (pageName: string) => void;
+	setPageTitle: (pageName: string) => void;
 }) => {
 	const logout = () => {
 		localStorage.removeItem('Token');
@@ -22,35 +22,22 @@ export const Navbar = ({
 						<i className="bx bx-layer nav_logo-icon"></i>
 						<span className="nav_logo-name">Matcha</span>
 					</a>
-					<ul className="nav_list">
-						<li
-							className="nav_link"
-							onClick={() => onChangePage('page1')}
-						>
-							<Link to={'page1'}>
-								<i className="fas fa-object-group"></i>
-								<span className="nav_name">page1</span>
-							</Link>
-						</li>
-						<li
-							className="nav_link"
-							onClick={() => onChangePage('page2')}
-						>
-							<Link to={'page2'}>
-								<i className="fas fa-object-group"></i>
-								<span className="nav_name">page1</span>
-							</Link>
-						</li>
-						<li
-							className="nav_link"
-							onClick={() => onChangePage('page3')}
-						>
-							<Link to={'page3'}>
-								<i className="fas fa-object-group"></i>
-								<span className="nav_name">page1</span>
-							</Link>
-						</li>
-					</ul>
+
+					<NavbarMenuItem
+						onClickMenuItem={() => setPageTitle('page1 Title')}
+						menuItemLabel="page1"
+						pagePath="page1"
+					/>
+					<NavbarMenuItem
+						onClickMenuItem={() => setPageTitle('page2 Title')}
+						menuItemLabel="page2"
+						pagePath="page2"
+					/>
+					<NavbarMenuItem
+						onClickMenuItem={() => setPageTitle('page3 Title')}
+						menuItemLabel="page3"
+						pagePath="page3"
+					/>
 				</div>
 				<a
 					className="nav_link"
@@ -62,5 +49,21 @@ export const Navbar = ({
 				</a>
 			</nav>
 		</div>
+	);
+};
+
+const NavbarMenuItem = ({
+	menuItemLabel,
+	pagePath,
+	onClickMenuItem,
+}: {
+	menuItemLabel: string;
+	pagePath: string;
+	onClickMenuItem: () => void;
+}) => {
+	return (
+		<Link to={pagePath} className="nav_link" onClick={onClickMenuItem}>
+			{menuItemLabel}
+		</Link>
 	);
 };
