@@ -27,18 +27,18 @@ export const Navbar = ({
 
 					<NavbarMenuItem
 						onClickMenuItem={() => setPageTitle('page1 Title')}
-						menuItemLabel="page1"
-						pagePath="page1"
+						menuItemLabel="Explorer"
+						pagePath="explorer"
 					/>
 					<NavbarMenuItem
 						onClickMenuItem={() => setPageTitle('page2 Title')}
-						menuItemLabel="page2"
-						pagePath="page2"
+						menuItemLabel="Connection"
+						pagePath="connection"
 					/>
 					<NavbarMenuItem
 						onClickMenuItem={() => setPageTitle('page3 Title')}
-						menuItemLabel="page3"
-						pagePath="page3"
+						menuItemLabel="About Me"
+						pagePath="me"
 					/>
 				</div>
 				<a
