@@ -1,30 +1,51 @@
 
 import React from 'react';
-import { createBrowserRouter } from 'react-router-dom';
-import HomePage from './components/PagePlaceholder';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { PageLogin } from './components/login/PageLogin';
 import { PageNavigation } from './components/navigation/PageNavigation';
+import { PageExplorer } from './components/browse/PageExplorer';
+import { PageConnection } from './components/connection/PageConnection';
+import { PageMyProfile } from './components/profile/PageMyProfile';
+import { PageChat } from './components/connection/chat/PageChat';
+import { PageDate } from './components/connection/date/PageDate';
+import { PageList } from './components/connection/list/PageList';
 
 const router = createBrowserRouter([
     {
         path: '/',
         element: <PageNavigation />,
         id: 'root',
+        
         children: [
             {
-                path: '/page1',
                 index: true,
-                element: <HomePage test={1} />,
+                element: <Navigate to='/explorer' />,
             },
             {
-                path: '/page2',
-                index: true,
-                element: <HomePage test={2} />,
+                path: '/explorer',
+                element: <PageExplorer />,
             },
             {
-                path: '/page3',
-                index: true,
-                element: <HomePage test={3} />,
+                path: '/connection',
+                element: <PageConnection />,
+                children: [
+                    {
+                        index: true,
+                        element: <PageList/>,
+                    },
+                    {
+                        path: '/connection/chat',
+                        element: <PageChat />,
+                    },
+                    {
+                        path: '/connection/date',
+                        element: <PageDate />,
+                    },
+                ]
+            },
+            {
+                path: '/me',
+                element: <PageMyProfile />,
             },
         ],
     },
