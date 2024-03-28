@@ -2,10 +2,12 @@ import React from 'react';
 import './page-navigation.css';
 import { Link } from 'react-router-dom';
 
+export type PageTitle = 'page1 Title' | 'page2 Title' | 'page3 Title';
+
 export const Navbar = ({
 	setPageTitle,
 }: {
-	setPageTitle: (pageName: string) => void;
+	setPageTitle: (pageTitle: PageTitle) => void;
 }) => {
 	const logout = () => {
 		localStorage.removeItem('Token');

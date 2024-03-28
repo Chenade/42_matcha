@@ -2,10 +2,11 @@ import React, { useEffect } from 'react';
 import './page-navigation.css';
 import { Outlet } from 'react-router-dom';
 import { Navbar } from './Navbar';
+import type { PageTitle } from './Navbar';
 
 export const PageNavigation = () => {
 
-    const [pageTitle, setPageTitle] = React.useState('首頁');
+    const [pageTitle, setPageTitle] = React.useState<PageTitle>('page1 Title');
 
     useEffect(() => {
         return () => {
