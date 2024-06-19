@@ -9,6 +9,7 @@ import { PageMyProfile } from './components/profile/PageMyProfile';
 import { PageChat } from './components/connection/chat/PageChat';
 import { PageDate } from './components/connection/date/PageDate';
 import { PageList } from './components/connection/list/PageList';
+import { PageRegistration } from './components/login/PageRegistration';
 
 const router = createBrowserRouter([
     {
@@ -54,6 +55,11 @@ const router = createBrowserRouter([
         element: <PageLogin />,
         id: 'login',
     },
+    {
+        path: 'register',
+        element: <PageRegistration />,
+        id: 'register',
+    }
 ]);
 
 export default router;
