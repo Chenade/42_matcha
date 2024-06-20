@@ -17,12 +17,12 @@ import (
 
 func main() {
 	//conect to database
-	db, err := database.InitDB()
+	err := database.InitDB()
 	if err != nil {
 		fmt.Println("Error initializing database:", err)
 		return
 	}
-	defer db.Close()
+	// defer db.Close()
 
 	//create a new mux
 	mux := goji.NewMux()
@@ -32,10 +32,10 @@ func main() {
 	mux.HandleFunc(pat.Get("/"), handlers.Index)
 	mux.HandleFunc(pat.Get("/hello/:name"), handlers.HelloName)
 	
-	mux.HandleFunc(pat.Get("/users"), func(w http.ResponseWriter, r *http.Request) { handlers.ListUsersHandler(w, r, db) })
+	mux.HandleFunc(pat.Get("/users"), handlers.ListUsersHandler)
 
-	mux.HandleFunc(pat.Post("/signup"), func(w http.ResponseWriter, r *http.Request) { handlers.Signup(w, r, db) })
-	mux.HandleFunc(pat.Post("/login"), func(w http.ResponseWriter, r *http.Request) { handlers.Login(w, r, db) })
+	mux.HandleFunc(pat.Post("/signup"), handlers.Signup)
+	mux.HandleFunc(pat.Post("/login"), handlers.Login)
 
 	//websocket
 	httpMux := http.NewServeMux()

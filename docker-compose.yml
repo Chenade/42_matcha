@@ -32,22 +32,22 @@ services:
       postgres:
         condition: service_healthy
 
-  go:
-    container_name: goapi
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    env_file:
-      - .env
-    volumes:
-      - ./backend/api:/usr/src/app
-    networks:
-      - matcha
-    depends_on:
-      postgres:
-        condition: service_healthy
+  # go:
+  #   container_name: goapi
+  #   build:
+  #     context: ./backend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - ./backend/api:/usr/src/app
+  #   networks:
+  #     - matcha
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
 
   reactjs:
     container_name: reactapp
