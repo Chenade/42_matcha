@@ -1,5 +1,6 @@
 CREATE TABLE views (
-    id      	SERIAL                      PRIMARY KEY,
-    user_id		Integer NOT NULL,
-	created_at 	TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    id SERIAL PRIMARY KEY,
+    who UUID,
+    whom UUID,
+    timestamp TIMESTAMP
 );

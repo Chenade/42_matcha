@@ -15,10 +15,12 @@ export const PageNavigation = () => {
                 toggle.removeEventListener('click', toggleClickHandler);
             }
         };
-    }, []); // Empty dependency array to run effect only once when component mounts
+    }, []);
 
-    // Click event handler for the toggle
+    // get cursor point 
     const toggleClickHandler = () => {
+        // setCursorPosition({ x: e.clientX, y: e.clientY });
+
         const nav = document.getElementById('nav-bar');
         const bodypd = document.getElementById('body-container');
         const headerpd = document.getElementById('header-toggle');
@@ -32,7 +34,7 @@ export const PageNavigation = () => {
 
     return (
         <>
-            <header className="header" id="header" onClick={toggleClickHandler}>
+            <header className="header" id="header"  onClick={toggleClickHandler}>
                 <h1 id="header-toggle" style={{ fontSize: '1.8em' }}>{pageTitle}</h1>
                 <Navbar setPageTitle={setPageTitle} />
             </header>
