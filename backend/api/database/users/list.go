@@ -2,16 +2,18 @@
 package users
 
 import (
-	"database/sql"
 	"fmt"
 	"net/http"
+
+	"api/database"
+
 
 	// "goji.io/pat"
 )
 
 
-func List(w http.ResponseWriter, r *http.Request, db *sql.DB) {
-    rows, err := db.Query("SELECT * FROM users")
+func List(w http.ResponseWriter, r *http.Request) {
+    rows, err := database.DB.Query("SELECT * FROM users")
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return

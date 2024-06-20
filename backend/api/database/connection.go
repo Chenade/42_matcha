@@ -10,7 +10,7 @@ import (
 // declare a global variable db
 // sql.DB db
 
-var Db *sql.DB
+var DB *sql.DB
 func InitDB() (error) {
 	const (
 		dbhost     = "localhost"
@@ -30,5 +30,6 @@ func InitDB() (error) {
 		return  err 
 	}
 
-	Db = db
+	DB = db
+	return nil
 }
