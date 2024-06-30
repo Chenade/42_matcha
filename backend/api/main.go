@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"net/http"
 
+	_ "github.com/lib/pq"
 	"goji.io"
 	"goji.io/pat"
-	_ "github.com/lib/pq"
 
 	"api/database"
 	"api/handlers"
@@ -31,7 +31,7 @@ func main() {
 	//api routes
 	mux.HandleFunc(pat.Get("/"), handlers.Index)
 	mux.HandleFunc(pat.Get("/hello/:name"), handlers.HelloName)
-	
+
 	mux.HandleFunc(pat.Get("/users"), handlers.ListUsersHandler)
 
 	mux.HandleFunc(pat.Post("/signup"), handlers.Signup)

@@ -84,7 +84,7 @@ export const PageRegistration = () => {
       };
     
       return (
-        <div className="login-container">
+        <div className="container">
           <h2>Register</h2>
           <form onSubmit={handleSubmit}>
             <label>
@@ -133,8 +133,8 @@ export const PageRegistration = () => {
                     required
                     />
                     {password.length > 0 && <span
-                    className="toggle-password-visibility"
-                    onClick={() => setShowPassword(!showPassword)}
+                        className="toggle-password-visibility"
+                        onClick={() => setShowPassword(!showPassword)}
                     >
                     {showPassword ? <FaEyeSlash /> : <FaEye />}
                     </span>}
