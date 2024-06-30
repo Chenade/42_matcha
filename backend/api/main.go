@@ -27,6 +27,7 @@ func main() {
 	//create a new mux
 	mux := goji.NewMux()
 	mux.Use(middleware.RequestLogger)
+	mux.Use(middleware.Https)
 
 	//api routes
 	mux.HandleFunc(pat.Get("/"), handlers.Index)
@@ -34,7 +35,7 @@ func main() {
 
 	mux.HandleFunc(pat.Get("/users"), handlers.ListUsersHandler)
 
-	mux.HandleFunc(pat.Post("/signup"), handlers.Signup)
+	mux.HandleFunc(pat.Post("/sign-up"), handlers.SignUp)
 	mux.HandleFunc(pat.Post("/login"), handlers.Login)
 
 	//websocket

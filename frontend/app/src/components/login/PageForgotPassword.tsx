@@ -13,10 +13,10 @@ export const PageForgotPassword = () => {
     setMessage('');
 
     // Here you would typically send the email to your server
-    const response = await fetch('https://your-backend-endpoint/forget-password', {
+    const response = await fetch('https://localhost:3000/forget-password', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'text/plain',
       },
       body: JSON.stringify({ email }),
     });

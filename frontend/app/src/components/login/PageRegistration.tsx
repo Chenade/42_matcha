@@ -59,17 +59,17 @@ export const PageRegistration = () => {
     
         setErrors([]);
 
-        const response = await fetch('http://localhost:3000/register', {
+        const response = await fetch('http://localhost:3000/sign-up', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            email,
-            username,
-            firstName,
-            lastName,
-            password, // hash the password on the server side
+            email: email,
+            username: username,
+            first_name: firstName,
+            last_name: lastName,
+            password: password, // hash the password on the server side
           }),
         });
     
@@ -85,7 +85,7 @@ export const PageRegistration = () => {
     
       return (
         <div className="container">
-          <h2>Register</h2>
+          <h2>Sign Up</h2>
           <form onSubmit={handleSubmit}>
             <label>
               Email:
