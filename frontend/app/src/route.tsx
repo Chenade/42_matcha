@@ -10,6 +10,8 @@ import { PageChat } from './components/connection/chat/PageChat';
 import { PageDate } from './components/connection/date/PageDate';
 import { PageList } from './components/connection/list/PageList';
 import { PageRegistration } from './components/login/PageRegistration';
+import { PageForgotPassword } from './components/login/PageForgotPassword';
+import { PageResetPassword } from './components/login/PageResetPassword';
 
 const router = createBrowserRouter([
     {
@@ -59,6 +61,16 @@ const router = createBrowserRouter([
         path: 'register',
         element: <PageRegistration />,
         id: 'register',
+    },
+    {
+        path: 'forgot-password',
+        element: <PageForgotPassword />,
+        id: 'forgot-password',
+    },
+    {
+        path: 'reset-password',
+        element: <PageResetPassword />,
+        id: 'reset-password',
     }
 ]);
 

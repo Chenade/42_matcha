@@ -28,7 +28,7 @@ export const PageLogin = () => {
   };
 
   return (
-    <div className="login-container">
+    <div className="container">
         <h2>Login</h2>
         <form onSubmit={handleLogin}>
             <label>

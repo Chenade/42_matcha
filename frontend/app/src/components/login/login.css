@@ -1,4 +1,4 @@
-.login-container {
+.container {
     width: 300px;
     margin: 0 auto;
     padding: 20px;
@@ -7,22 +7,22 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
   
-  .login-container h2 {
+  .container h2 {
     text-align: center;
   }
   
-  .login-container form {
+  .container form {
     display: flex;
     flex-direction: column;
   }
   
-  .login-container label {
+  .container label {
     display: flex;
     flex-direction: column;
     margin-bottom: 15px;
   }
   
-  .login-container input {
+  .container input {
     padding: 8px;
     margin-top: 5px;
     border: 1px solid #ccc;
@@ -30,17 +30,17 @@
     box-sizing: border-box;
   }
 
-  .login-container .password-input-container {
+  .container .password-input-container {
     position: relative;
   }
   
-  .login-container .password-input-container input {
+  .container .password-input-container input {
     width: 100%;
     padding-right: 40px; /* Adjust padding to accommodate the icon */
     box-sizing: border-box;
   }
   
-  .login-container .toggle-password-visibility {
+  .container .toggle-password-visibility {
     position: absolute;
     top: 65%;
     transform: translateY(-50%);
@@ -48,7 +48,7 @@
     cursor: pointer;
   }
   
-  .login-container button {
+  .container button {
     padding: 10px;
     margin-top: 10px;
     border: none;
@@ -58,23 +58,23 @@
     cursor: pointer;
   }
   
-  .login-container button:hover {
+  .container button:hover {
     background-color: #0056b3;
   }
   
-  .login-container .links {
+  .container .links {
     margin-top: 10px;
     text-align: center;
   }
   
-  .login-container .links a {
+  .container .links a {
     display: block;
     margin-top: 5px;
     color: #007BFF;
     text-decoration: none;
   }
   
-  .login-container .links a:hover {
+  .container .links a:hover {
     text-decoration: underline;
   }
   
