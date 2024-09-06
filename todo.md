@@ -1,9 +1,9 @@
 # ft_matcha
 
 - Setting
-    - [ ] env: docker
-    - [ ] backend: golang
-    - [ ] frontend: ReactJs
+    - [X] env: docker
+    - [X] backend: golang
+    - [X] frontend: ReactJs
 
 - **User Login**
     - [ ] Registration: email, username, last name, first name, password(somehow protected)
@@ -13,6 +13,16 @@
     - [ ] Log Out: one click from any page
 
 - **User Profile**
+    - [Backend] fill out gender, sexual perference, biography
+    - [Backend] modify basic info (name, email)
+    - [Backend] view all the info
+    - [ ] select interestes (hashtags)
+    - [ ] upload at least one pictures, up to 5
+    - [ ] a list of who has view them
+    - [ ] a list of who has liked them
+    - [ ] request for GPS positioning
+    - [ ] modify their GPS position
+
 - **Chat**
 - **Notification**
     - Backend:

@@ -12,7 +12,6 @@ import (
 	"api/database"
 	"api/handlers"
 	"api/middleware"
-	"api/utils"
 )
 
 func main() {
@@ -38,6 +37,10 @@ func main() {
 	mux.HandleFunc(pat.Post("/sign-up"), handlers.SignUp)
 	mux.HandleFunc(pat.Post("/login"), handlers.Login)
 
+	mux.HandleFunc(pat.Get("/users/:id"), handlers.GetUserById)
+	mux.HandleFunc(pat.Put("/users/:id"), handlers.UpdateUserById)
+
+
 	//websocket
 	httpMux := http.NewServeMux()
 	httpMux.HandleFunc("/ws", handlers.WsHandler)
@@ -46,6 +49,6 @@ func main() {
 	port := 3000
 	addr := fmt.Sprintf(":%d", port)
 
-	utils.Log(fmt.Sprintf("Server running on port %d", port))
+	fmt.Printf("Server listening on %d\n", port)
 	http.ListenAndServe(addr, httpMux)
 }
