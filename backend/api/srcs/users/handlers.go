@@ -1,11 +1,11 @@
-package handlers
+package users
 
 import (
+	// "fmt"
 	"encoding/json"
 	"net/http"
 	"goji.io/pat"
 
-	users "api/database/users"
 )
 
 // get by id
@@ -17,7 +17,7 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	usr, err := users.GetById(id)
+	usr, err := GetById(id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -35,7 +35,14 @@ func UpdateUserById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err := users.UpdateById(w, r, id)
+	var _usr User
+	err := json.NewDecoder(r.Body).Decode(&_usr)
+    if err != nil {
+        http.Error(w, "Invalid JSON body", http.StatusBadRequest)
+        return
+    }
+
+	_, err = UpdateById(_usr, id)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)

@@ -16,7 +16,7 @@
     - [Backend] fill out gender, sexual perference, biography
     - [Backend] modify basic info (name, email)
     - [Backend] view all the info
-    - [ ] select interestes (hashtags)
+    - [Backend] add / delete interestes (hashtags)
     - [ ] upload at least one pictures, up to 5
     - [ ] a list of who has view them
     - [ ] a list of who has liked them

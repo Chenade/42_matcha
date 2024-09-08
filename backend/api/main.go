@@ -1,7 +1,6 @@
 package main
 
 import (
-	// "database/sql"
 	"fmt"
 	"net/http"
 
@@ -12,6 +11,11 @@ import (
 	"api/database"
 	"api/handlers"
 	"api/middleware"
+
+	ws "api/srcs/websocket"
+
+	users "api/srcs/users"
+	interests "api/srcs/interests"
 )
 
 func main() {
@@ -21,7 +25,6 @@ func main() {
 		fmt.Println("Error initializing database:", err)
 		return
 	}
-	// defer db.Close()
 
 	//create a new mux
 	mux := goji.NewMux()
@@ -37,13 +40,18 @@ func main() {
 	mux.HandleFunc(pat.Post("/sign-up"), handlers.SignUp)
 	mux.HandleFunc(pat.Post("/login"), handlers.Login)
 
-	mux.HandleFunc(pat.Get("/users/:id"), handlers.GetUserById)
-	mux.HandleFunc(pat.Put("/users/:id"), handlers.UpdateUserById)
+	mux.HandleFunc(pat.Get("/users/:id"), users.GetUserById)
+	mux.HandleFunc(pat.Put("/users/:id"), users.UpdateUserById)
+
+	mux.HandleFunc(pat.Get("/interests"), interests.ListInterests)
+	mux.HandleFunc(pat.Post("/:usrId/interests"), interests.AddToUser)
+	mux.HandleFunc(pat.Get("/:usrId/interests"), interests.ListInterestsByUser)
+	mux.HandleFunc(pat.Delete("/:usrId/interests"), interests.RemoveFromUser)
 
 
 	//websocket
 	httpMux := http.NewServeMux()
-	httpMux.HandleFunc("/ws", handlers.WsHandler)
+	httpMux.HandleFunc("/ws", ws.WsHandler)
 	httpMux.Handle("/", mux)
 
 	port := 3000

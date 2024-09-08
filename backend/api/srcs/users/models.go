@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"regexp"
 	"strings"
+	"encoding/json"
 
 	"api/database"
 )
@@ -20,28 +21,23 @@ func validemail(email string) bool {
 
 
 func List(w http.ResponseWriter, r *http.Request) {
-	// Fetch all users from the database
-	var users []User
-	err := database.DB.Select(&users, "SELECT * FROM users")
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+    // Fetch all users from the database
+    var users []User
+    err := database.DB.Select(&users, "SELECT * FROM users")
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
 
-	// Prepare the response
-	returnVal := ""
-	for _, usr := range users {
-		returnVal += RetunValue(usr) + "\n"
-	}
-
-	fmt.Fprintf(w, returnVal)
+    returnValJson, _ := json.Marshal(users)
+    fmt.Fprint(w, string(returnValJson))
 }
 
 //get by id
 func GetById(id string) (User, error) {
 
 	var usr User
-	query := "SELECT * FROM users WHERE id = $1"
+	query := fmt.Sprintf("SELECT * FROM users WHERE id = %s", id)
 	err := database.DB.Get(&usr, query, id)
 	if err != nil {
 		return User{}, fmt.Errorf("User not found")
@@ -51,7 +47,7 @@ func GetById(id string) (User, error) {
 }
 
 // update email, gender, sexual preference, bio
-func UpdateById(w http.ResponseWriter, r *http.Request, id string) (User, error) {
+func UpdateById(_usr User, id string) (User, error) {
 
 	var usr User
 	err := database.DB.Get(&usr, "SELECT * FROM users WHERE id = $1", id)
@@ -64,7 +60,7 @@ func UpdateById(w http.ResponseWriter, r *http.Request, id string) (User, error)
 	argID := 1
 
 	// Email validation and update
-	if email := r.FormValue("email"); email != "" {
+	if email := _usr.Email; email != "" {
 		if !validemail(email) {
 			return User{}, fmt.Errorf("invalid email value")
 		}
@@ -87,7 +83,7 @@ func UpdateById(w http.ResponseWriter, r *http.Request, id string) (User, error)
 	}
 
 	// Gender update
-	if gender := r.FormValue("gender"); gender != "" {
+	if gender := _usr.Gender; gender != "" {
 		if gender != "male" && gender != "female" && gender != "other" {
 			return User{}, fmt.Errorf("invalid gender value")
 		}
@@ -98,16 +94,32 @@ func UpdateById(w http.ResponseWriter, r *http.Request, id string) (User, error)
 	}
 
 	// Sexual preference update
-	if sexualPreference := r.FormValue("sexual_preference"); sexualPreference != "" {
+	if sexualPreference := _usr.SexualPreference; sexualPreference != "" {
 		usr.SexualPreference = sexualPreference
 		fields = append(fields, fmt.Sprintf("sexual_perference = $%d", argID))
 		args = append(args, usr.SexualPreference)
 		argID++
 	}
 
+	// first name update
+	if firstName := _usr.FirstName; firstName != "" {
+		usr.FirstName = firstName
+		fields = append(fields, fmt.Sprintf("first_name = $%d", argID))
+		args = append(args, usr.FirstName)
+		argID++
+	}
+
+	// last name update
+	if lastName := _usr.LastName; lastName != "" {
+		usr.LastName = lastName
+		fields = append(fields, fmt.Sprintf("last_name = $%d", argID))
+		args = append(args, usr.LastName)
+		argID++
+	}
+
 	// Bio update
-	if bio := r.FormValue("bio"); bio != "" {
-		usr.Bio = &bio
+	if bio := _usr.Bio; bio != nil {
+		usr.Bio = bio
 		fields = append(fields, fmt.Sprintf("bio = $%d", argID))
 		args = append(args, usr.Bio)
 		argID++

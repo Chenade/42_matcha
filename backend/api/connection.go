@@ -1,18 +1,16 @@
-// connection.go
-package database
+package main
 
 import (
-	// "database/sql"
+	"database/sql"
 	"fmt"
 
-	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
 
 // declare a global variable db
 // sql.DB db
 
-var DB *sqlx.DB
+var DB *sql.DB
 
 func InitDB() error {
 	const (
@@ -23,7 +21,7 @@ func InitDB() error {
 		dbname     = "postgres"
 	)
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+"password=%s dbname=%s sslmode=disable", dbhost, dbport, dbuser, dbpassword, dbname)
-	db, err := sqlx.Connect("postgres", psqlInfo)
+	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
 		return err
 	}

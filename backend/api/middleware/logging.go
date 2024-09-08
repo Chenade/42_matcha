@@ -25,7 +25,12 @@ func (rl *ResponseLogger) WriteHeader(code int) {
 }
 
 func logRequest(r *http.Request) {
-	fmt.Printf("Received request: %s %s\n", r.Method, r.URL.Path)
+	body := ""
+	if r.Method == "POST" || r.Method == "PUT" {
+		r.ParseForm()
+		body = " | body: " + r.Form.Encode()
+	}
+	fmt.Printf("Received %s request for %s%s\n", r.Method, r.URL.Path, body)
 }
 
 func logResponse(r *http.Request, status int) {
