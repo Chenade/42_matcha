@@ -1,11 +1,14 @@
 package users
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
+	"mime/multipart"
 	"net/http"
+	"os"
 	"regexp"
 	"strings"
-	"encoding/json"
 
 	"api/database"
 )
@@ -139,5 +142,71 @@ func UpdateById(_usr User, id string) (User, error) {
 
 	return usr, nil
 }
+
+// update image by id
+func UploadImageToUser(w http.ResponseWriter, img *multipart.FileHeader, id string) {
+	// Check if the user exists
+	var usr User
+	err := database.DB.Get(&usr, "SELECT * FROM users WHERE id = $1", id)
+	if err != nil {
+		http.Error(w, "User not found", http.StatusBadRequest)
+		return
+	}
+
+	file, err := img.Open()
+	if err != nil {
+		http.Error(w, "Error opening the file", http.StatusBadRequest)
+		return
+	}
+	defer file.Close()
+
+	dst, err := os.Create(fmt.Sprintf("images/%s", img.Filename))
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, "Error creating the file", http.StatusInternalServerError)
+		return
+	}
+	defer dst.Close()
+
+	_, err = io.Copy(dst, file)
+	if err != nil {
+		http.Error(w, "Error copying the file", http.StatusInternalServerError)
+		return
+	}
+
+	_, err = database.DB.Exec("INSERT INTO user_pictures (user_id, path) VALUES ($1, $2)", id, img.Filename)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode("Image uploaded successfully")
+}
+
+// // delete image by id
+// func DeleteImageByUser(w http.ResponseWriter, r *http.Request) {
+// 	id := r.URL.Query().Get("id")
+// 	if id == "" {
+// 		http.Error(w, "id is required", http.StatusBadRequest)
+// 		return
+// 	}
+
+// 	// Check if the user exists
+// 	var usr User
+// 	err := database.DB.Get(&usr, "SELECT * FROM users WHERE id = $1", id)
+// 	if err != nil {
+// 		http.Error(w, "User not found", http.StatusBadRequest)
+// 		return
+// 	}
+
+// 	// Delete the image
+// 	err = DeleteImageById(id)
+// 	if err != nil {
+// 		http.Error(w, err.Error(), http.StatusInternalServerError)
+// 		return
+// 	}
+
+// 	json.NewEncoder(w).Encode("Image deleted successfully")
+// }
 
 

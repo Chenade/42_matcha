@@ -40,8 +40,10 @@ func main() {
 	mux.HandleFunc(pat.Post("/sign-up"), handlers.SignUp)
 	mux.HandleFunc(pat.Post("/login"), handlers.Login)
 
-	mux.HandleFunc(pat.Get("/users/:id"), users.GetUserById)
-	mux.HandleFunc(pat.Put("/users/:id"), users.UpdateUserById)
+	mux.HandleFunc(pat.Get("/users/:id"), users.GetInfo)
+	mux.HandleFunc(pat.Put("/users/:id"), users.Update)
+	mux.HandleFunc(pat.Post("/users/:id/image"), users.UploadImage)
+	mux.HandleFunc(pat.Delete("/users/:id/image"), users.DeleteImage)
 
 	mux.HandleFunc(pat.Get("/interests"), interests.ListInterests)
 	mux.HandleFunc(pat.Post("/:usrId/interests"), interests.AddToUser)
