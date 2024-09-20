@@ -3,21 +3,20 @@ package interests
 import (
 	"net/http"
 	"encoding/json"
-
-	"goji.io/pat"
 )
 
 func ListInterests(w http.ResponseWriter, r *http.Request) {
 	List(w, r)
 }
 
-func ListInterestsByUser(w http.ResponseWriter, r *http.Request) {
-	id := pat.Param(r, "usrId")
-	ListUserInterests(w, r, id)
-}
+// func ListInterestsByUser(w http.ResponseWriter, r *http.Request) {
+// 	id := pat.Param(r, "usrId")
+// 	ListUserInterests(w, r, id)
+// }
 
 func AddToUser(w http.ResponseWriter, r *http.Request) {
-	usrId := pat.Param(r, "usrId")
+	usrId := r.Header.Get("usrId")
+
 	if usrId == "" {
 		http.Error(w, "id is required", http.StatusBadRequest)
 		return
@@ -26,7 +25,7 @@ func AddToUser(w http.ResponseWriter, r *http.Request) {
 	var _interest Interest
 	err := json.NewDecoder(r.Body).Decode(&_interest)
 	if err != nil {
-		http.Error(w, "Invalid JSON body", http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -37,7 +36,7 @@ func AddToUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func RemoveFromUser(w http.ResponseWriter, r *http.Request) {
-	usrId := pat.Param(r, "usrId")
+	usrId := r.Header.Get("usrId")
 	if usrId == "" {
 		http.Error(w, "id is required", http.StatusBadRequest)
 		return

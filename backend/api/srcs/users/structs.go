@@ -1,5 +1,9 @@
 package users
 
+import (
+	Interests "api/srcs/interests"
+)
+
 type User struct {
 	ID               int     `db:"id"`
 	Username         string  `db:"username"`
@@ -19,6 +23,8 @@ type User struct {
 	Bio              *string  `db:"bio"`
 	ProfilePictureID *int     `db:"profile_picture_id"`
 	BirthDate        *string  `db:"birth_date"`
+	Pictures         []UserPicture
+	Interests        []Interests.Interest
 }
 
 type UserPicture struct {

@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"api/database"
+	Interest "api/srcs/interests"
 )
 
 func validemail(email string) bool {
@@ -40,13 +41,33 @@ func List(w http.ResponseWriter, r *http.Request) {
 func GetById(id string) (User, error) {
 
 	var usr User
-	query := fmt.Sprintf("SELECT * FROM users WHERE id = %s", id)
-	err := database.DB.Get(&usr, query, id)
+	// get the user by id and join the user_pictures table
+	err := database.DB.Get(&usr, "SELECT * FROM users WHERE id = $1", id)
 	if err != nil {
 		return User{}, fmt.Errorf("User not found")
 	}
 
+	// get the user pictures
+	usr.Pictures, err = getImageByUser(id)
+	if err != nil {
+		return User{}, err
+	}
+
+	// get the user interests
+	usr.Interests, err = Interest.ListByUser(id)
+	if err != nil {
+		return User{}, err
+	}
 	return usr, nil
+}
+
+func getImageByUser(id string) ([]UserPicture, error) {
+	var pictures []UserPicture
+	err := database.DB.Select(&pictures, "SELECT * FROM user_pictures WHERE user_id = $1", id)
+	if err != nil {
+		return []UserPicture{}, err
+	}
+	return pictures, nil
 }
 
 // update email, gender, sexual preference, bio
@@ -144,69 +165,59 @@ func UpdateById(_usr User, id string) (User, error) {
 }
 
 // update image by id
-func UploadImageToUser(w http.ResponseWriter, img *multipart.FileHeader, id string) {
+func UploadImageToUser(w http.ResponseWriter, img *multipart.FileHeader, id string) error {
 	// Check if the user exists
 	var usr User
 	err := database.DB.Get(&usr, "SELECT * FROM users WHERE id = $1", id)
 	if err != nil {
-		http.Error(w, "User not found", http.StatusBadRequest)
-		return
+		return fmt.Errorf("User not found")
 	}
 
 	file, err := img.Open()
 	if err != nil {
-		http.Error(w, "Error opening the file", http.StatusBadRequest)
-		return
+		return fmt.Errorf("error retrieving the file")
 	}
 	defer file.Close()
 
 	dst, err := os.Create(fmt.Sprintf("images/%s", img.Filename))
 	if err != nil {
 		fmt.Println(err)
-		http.Error(w, "Error creating the file", http.StatusInternalServerError)
-		return
+		return fmt.Errorf("error creating the file")
 	}
 	defer dst.Close()
 
 	_, err = io.Copy(dst, file)
 	if err != nil {
-		http.Error(w, "Error copying the file", http.StatusInternalServerError)
-		return
+		return fmt.Errorf("error copying the file")
 	}
 
 	_, err = database.DB.Exec("INSERT INTO user_pictures (user_id, path) VALUES ($1, $2)", id, img.Filename)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return err
 	}
 
-	json.NewEncoder(w).Encode("Image uploaded successfully")
+	return nil
 }
 
-// // delete image by id
-// func DeleteImageByUser(w http.ResponseWriter, r *http.Request) {
-// 	id := r.URL.Query().Get("id")
-// 	if id == "" {
-// 		http.Error(w, "id is required", http.StatusBadRequest)
-// 		return
-// 	}
+// delete image by id
+func DeleteImageByUser(imgId, userId string) error {
+	var img UserPicture
+	err := database.DB.Get(&img, "SELECT * FROM user_pictures WHERE id = $1 AND user_id = $2", imgId, userId)
+	if err != nil {
+		return fmt.Errorf("Image not found")
+	}
 
-// 	// Check if the user exists
-// 	var usr User
-// 	err := database.DB.Get(&usr, "SELECT * FROM users WHERE id = $1", id)
-// 	if err != nil {
-// 		http.Error(w, "User not found", http.StatusBadRequest)
-// 		return
-// 	}
+	_, err = database.DB.Exec("DELETE FROM user_pictures WHERE id = $1", imgId)
+	if err != nil {
+		return err
+	}
+	
+	err = os.Remove(fmt.Sprintf("images/%s", img.Path))
+	if err != nil {
+		return err
+	}
 
-// 	// Delete the image
-// 	err = DeleteImageById(id)
-// 	if err != nil {
-// 		http.Error(w, err.Error(), http.StatusInternalServerError)
-// 		return
-// 	}
-
-// 	json.NewEncoder(w).Encode("Image deleted successfully")
-// }
+	return nil
+}
 
 

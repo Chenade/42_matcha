@@ -9,6 +9,7 @@ import (
 )
 
 func checkInterest(interest string) (int) {
+	println(interest)
 	var id int
 	err := database.DB.Get(&id, "SELECT id FROM interests WHERE name = $1", interest)
 	if err != nil {
@@ -96,14 +97,12 @@ func RemoveInterest(w http.ResponseWriter, _interest Interest, id string) (bool)
 }
 
 //list user interests
-func ListUserInterests(w http.ResponseWriter, r *http.Request, id string) {
+func ListByUser(id string) ([]Interest, error) {
 	var interests []Interest
 	err := database.DB.Select(&interests, "SELECT i.id, i.name FROM interests i JOIN user_interests ui ON i.id = ui.interest_id WHERE ui.user_id = $1", id)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return []Interest{}, err
 	}
 
-	returnValJson, _ := json.Marshal(interests)
-	fmt.Fprint(w, string(returnValJson))
+	return interests, nil	
 }

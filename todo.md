@@ -17,9 +17,10 @@
     - [Backend] modify basic info (name, email)
     - [Backend] view all the info
     - [Backend] add / delete interestes (hashtags)
-    - [ ] upload at least one pictures, up to 5
-    - [ ] a list of who has view them
-    - [ ] a list of who has liked them
+    - [Backend] upload at least one pictures, up to 5
+    - [Backend] delete the image after uploaded
+    - [Create/Read] view record
+    - [Create/Read/Delete] like record
     - [ ] request for GPS positioning
     - [ ] modify their GPS position
 
