@@ -7,7 +7,8 @@ import (
 // 
 func GetViewsByUser(id string) ([]Views, error) {
     var views []Views
-    err := database.DB.Select(&views, "SELECT * FROM views WHERE whom = $1", id)
+	// select from views and join with user info
+	err := database.DB.Select(&views, "SELECT views.*, users.username FROM views JOIN users ON views.who = users.id WHERE whom = $1", id)
     if err != nil {
         return []Views{}, err
     }
@@ -17,7 +18,7 @@ func GetViewsByUser(id string) ([]Views, error) {
 
 func GetLikesByUser(id string) ([]Likes, error) {
 	var likes []Likes
-	err := database.DB.Select(&likes, "SELECT * FROM likes WHERE whom = $1", id)
+	err := database.DB.Select(&likes, "SELECT likes.*, users.username FROM Flikes JOIN users ON likes.who = users.id WHERE whom = $1", id)
 	if err != nil {
 		return []Likes{}, err
 	}

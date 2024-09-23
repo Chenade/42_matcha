@@ -7,6 +7,8 @@ type Views struct {
 	Who			int			`json:"who"`
 	Whom		int			`json:"whom"`
 	Timestamp	time.Time	`json:"timestamps"`
+	Created_at	time.Time	`json:"created_at"`
+	Username	string		`json:"username"`
 }
 
 type Likes struct {
@@ -14,4 +16,6 @@ type Likes struct {
 	Who			int			`json:"who"`
 	Whom		int			`json:"whom"`
 	Timestamp	time.Time	`json:"timestamps"`
+	Created_at	time.Time	`json:"created_at"`
+	Username	string		`json:"username"`
 }

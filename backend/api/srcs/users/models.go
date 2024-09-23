@@ -106,6 +106,19 @@ func UpdateById(_usr User, id string) (User, error) {
 		argID++
 	}
 
+	// Username update
+	if username := _usr.Username; username != "" {
+		var usernameExists bool
+		err = database.DB.QueryRow("SELECT EXISTS(SELECT 1 FROM users WHERE username = $1 AND id != $2)", username, id).Scan(&usernameExists)
+		if err != nil {
+			return User{}, err
+		}
+		usr.Username = username
+		fields = append(fields, fmt.Sprintf ("username = $%d", argID))
+		args = append(args, usr.Username)
+		argID++
+	}
+
 	// Gender update
 	if gender := _usr.Gender; gender != "" {
 		if gender != "male" && gender != "female" && gender != "other" {
