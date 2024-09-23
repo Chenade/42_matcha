@@ -2,7 +2,7 @@ import React from 'react';
 import './page-navigation.css';
 import { Link } from 'react-router-dom';
 
-export type PageTitle = 'page1 Title' | 'page2 Title' | 'page3 Title';
+export type PageTitle = 'page1 Title' | 'page2 Title' | 'About Me';
 
 export const Navbar = ({
 	setPageTitle,
@@ -36,7 +36,7 @@ export const Navbar = ({
 						pagePath="connection"
 					/>
 					<NavbarMenuItem
-						onClickMenuItem={() => setPageTitle('page3 Title')}
+						onClickMenuItem={() => setPageTitle('About Me')}
 						menuItemLabel="About Me"
 						pagePath="me"
 					/>

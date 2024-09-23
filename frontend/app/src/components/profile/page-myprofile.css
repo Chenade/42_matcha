@@ -1,0 +1,37 @@
+.home-page-container
+{
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    width: 100%;
+}
+
+.home-page
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: center; */
+    width: 100vw;
+    max-width: 60vw;
+}
+
+@media screen and (max-width: 768px)
+{
+    .home-page
+    {
+        max-width: 80vw;
+    }
+}
+
+.home-page div
+{
+    width: 100%;
+}
+
+.home-page .col-center
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
