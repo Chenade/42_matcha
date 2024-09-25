@@ -13,12 +13,13 @@
     - [ ] Log Out: one click from any page
 
 - **User Profile**
-    - [Backend] fill out gender, sexual perference, biography
-    - [Backend] modify basic info (name, email)
-    - [Backend] view all the info
+    - [X] fill out gender, sexual perference, biography
+    - [X] modify basic info (name, email)
+    - [X] view all the info
+    - [X] upload at least one pictures, up to 5
+    - [X] delete the image after uploaded
+    - [ ] Set one of the image as profile photo
     - [Backend] add / delete interestes (hashtags)
-    - [Backend] upload at least one pictures, up to 5
-    - [Backend] delete the image after uploaded
     - [Create/Read] view record
     - [Create/Read/Delete] like record
     - [ ] request for GPS positioning
@@ -28,7 +29,7 @@
 - **Notification**
     - Backend:
         - [ ] Database
-        - [ ] websocket
+        - [X] websocket
     - Frontend:
         - [ ] chatbox
         - [ ] alert
