@@ -41,19 +41,16 @@ func List(w http.ResponseWriter, r *http.Request) {
 func GetById(id string) (User, error) {
 
 	var usr User
-	// get the user by id and join the user_pictures table
 	err := database.DB.Get(&usr, "SELECT * FROM users WHERE id = $1", id)
 	if err != nil {
 		return User{}, fmt.Errorf("User not found")
 	}
 
-	// get the user pictures
 	usr.Pictures, err = getImageByUser(id)
 	if err != nil {
 		return User{}, err
 	}
 
-	// get the user interests
 	usr.Interests, err = Interest.ListByUser(id)
 	if err != nil {
 		return User{}, err
@@ -162,6 +159,14 @@ func UpdateById(_usr User, id string) (User, error) {
 		argID++
 	}
 
+	// Birthdate update
+	if birthdate := _usr.BirthDate; birthdate != nil {
+		usr.BirthDate = birthdate
+		fields = append(fields, fmt.Sprintf("birth_date = $%d", argID))
+		args = append(args, usr.BirthDate)
+		argID++
+	}
+
 	if len(fields) == 0 {
 		return User{}, fmt.Errorf("no fields to update")
 	}
@@ -192,7 +197,7 @@ func UploadImageToUser(w http.ResponseWriter, img *multipart.FileHeader, id stri
 	}
 	defer file.Close()
 
-	dst, err := os.Create(fmt.Sprintf("images/%s", img.Filename))
+	dst, err := os.Create(fmt.Sprintf("/usr/src/app/images/%s", img.Filename))
 	if err != nil {
 		fmt.Println(err)
 		return fmt.Errorf("error creating the file")
@@ -217,15 +222,18 @@ func DeleteImageByUser(imgId, userId string) error {
 	var img UserPicture
 	err := database.DB.Get(&img, "SELECT * FROM user_pictures WHERE id = $1 AND user_id = $2", imgId, userId)
 	if err != nil {
-		return fmt.Errorf("Image not found")
+		return fmt.Errorf("image not found")
 	}
+	
+	println(img.Path)
 
 	_, err = database.DB.Exec("DELETE FROM user_pictures WHERE id = $1", imgId)
 	if err != nil {
 		return err
 	}
 	
-	err = os.Remove(fmt.Sprintf("images/%s", img.Path))
+	// err = os.Remove(fmt.Sprintf("images/%s", img.Path))
+	err = os.Remove(fmt.Sprintf("/usr/src/app/images/%s", img.Path))
 	if err != nil {
 		return err
 	}
