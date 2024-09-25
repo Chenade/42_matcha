@@ -1,37 +1,13 @@
-.home-page-container
-{
-    display: flex;
-    justify-content: center;
-    height: 100vh;
+.imgsList {
     width: 100%;
+    overflow-x: auto; /* Disable horizontal scrolling */
+  }
+  
+.thumbnail
+{
+    height: 180px;
+    width: 180px;
+    border-radius: 20px;
+    padding: 10px;
 }
 
-.home-page
-{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    /* justify-content: center; */
-    width: 100vw;
-    max-width: 60vw;
-}
-
-@media screen and (max-width: 768px)
-{
-    .home-page
-    {
-        max-width: 80vw;
-    }
-}
-
-.home-page div
-{
-    width: 100%;
-}
-
-.home-page .col-center
-{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}

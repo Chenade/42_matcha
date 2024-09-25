@@ -13,6 +13,7 @@ export const Checkbox = ({
 }) => {
     return (
         <div className="checkbox-container">
+            <span className="checkbox-label">{label}</span>
             <label className="switch">
                 <input
                     type="checkbox"
@@ -22,7 +23,6 @@ export const Checkbox = ({
                 />
                 <span className="slider"></span>
             </label>
-            <span className="checkbox-label">{label}</span>
         </div>
     );
 };

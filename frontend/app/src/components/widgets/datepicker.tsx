@@ -6,16 +6,18 @@ export const DatePicker = ({
     onChange,
 }: {
     label: string;
-    value: string;
+    value: string; 
     onChange: (value: string) => void;
 }) => {
+    const formattedDate = value ? new Date(value).toISOString().split('T')[0] : '';
+
     return (
         <div className="date">
             <label className="date_label">{label}</label>
             <input
                 className="date_field"
                 type="date"
-                value={value}
+                value={formattedDate}
                 onChange={(e) => onChange(e.target.value)}
             />
         </div>

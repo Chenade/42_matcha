@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import './page-navigation.css';
-import { Link } from 'react-router-dom';
 
 export type PageTitle = 'page1 Title' | 'page2 Title' | 'About Me';
 
@@ -9,6 +9,25 @@ export const Navbar = ({
 }: {
 	setPageTitle: (pageTitle: PageTitle) => void;
 }) => {
+	const location = useLocation();
+
+	useEffect(() => {
+		switch (location.pathname) {
+			case '/explorer':
+				setPageTitle('page1 Title');
+				break;
+			case '/connection':
+				setPageTitle('page2 Title');
+				break;
+			case '/me':
+				setPageTitle('About Me');
+				break;
+			default:
+				setPageTitle('page1 Title'); // Default to the first page title
+				break;
+		}
+	}, [location.pathname, setPageTitle]);
+
 	const logout = () => {
 		localStorage.removeItem('Token');
 		localStorage.removeItem('path');
@@ -28,24 +47,20 @@ export const Navbar = ({
 					<NavbarMenuItem
 						onClickMenuItem={() => setPageTitle('page1 Title')}
 						menuItemLabel="Explorer"
-						pagePath="explorer"
+						pagePath="/explorer"
 					/>
 					<NavbarMenuItem
 						onClickMenuItem={() => setPageTitle('page2 Title')}
 						menuItemLabel="Connection"
-						pagePath="connection"
+						pagePath="/connection"
 					/>
 					<NavbarMenuItem
 						onClickMenuItem={() => setPageTitle('About Me')}
 						menuItemLabel="About Me"
-						pagePath="me"
+						pagePath="/me"
 					/>
 				</div>
-				<a
-					className="nav_link"
-					href="javascript:void(0)"
-					onClick={logout}
-				>
+				<a className="nav_link" href="javascript:void(0)" onClick={logout}>
 					<i className="fas fa-sign-out-alt"></i>
 					<span className="nav_name">SignOut</span>
 				</a>
