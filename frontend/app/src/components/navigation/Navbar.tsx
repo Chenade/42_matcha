@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './page-navigation.css';
 
-export type PageTitle = 'page1 Title' | 'page2 Title' | 'About Me';
+export type PageTitle = 'page1 Title' | 'My Connections' | 'About Me' | 'Chats' | 'Date';
 
 export const Navbar = ({
 	setPageTitle,
@@ -17,7 +17,13 @@ export const Navbar = ({
 				setPageTitle('page1 Title');
 				break;
 			case '/connection':
-				setPageTitle('page2 Title');
+				setPageTitle('My Connections');
+				break;
+			case '/connection/chat':
+				setPageTitle('Chats');
+				break;
+			case '/connection/date':
+				setPageTitle('Date');
 				break;
 			case '/me':
 				setPageTitle('About Me');
@@ -50,7 +56,7 @@ export const Navbar = ({
 						pagePath="/explorer"
 					/>
 					<NavbarMenuItem
-						onClickMenuItem={() => setPageTitle('page2 Title')}
+						onClickMenuItem={() => setPageTitle('My Connections')}
 						menuItemLabel="Connection"
 						pagePath="/connection"
 					/>
@@ -60,7 +66,8 @@ export const Navbar = ({
 						pagePath="/me"
 					/>
 				</div>
-				<a className="nav_link" href="javascript:void(0)" onClick={logout}>
+				{/* <a className="nav_link" href="javascript:void(0)" onClick={logout}> */}
+				<a className="nav_link" href="/" onClick={logout}>
 					<i className="fas fa-sign-out-alt"></i>
 					<span className="nav_name">SignOut</span>
 				</a>

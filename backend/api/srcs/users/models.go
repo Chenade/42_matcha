@@ -3,15 +3,13 @@ package users
 import (
 	"encoding/json"
 	"fmt"
-	"io"
-	"mime/multipart"
 	"net/http"
-	"os"
 	"regexp"
 	"strings"
 
 	"api/database"
 	Interest "api/srcs/interests"
+	Images "api/srcs/images"
 )
 
 func validemail(email string) bool {
@@ -46,7 +44,7 @@ func GetById(id string) (User, error) {
 		return User{}, fmt.Errorf("User not found")
 	}
 
-	usr.Pictures, err = getImageByUser(id)
+	usr.Pictures, err = Images.GetImageByUser(id)
 	if err != nil {
 		return User{}, err
 	}
@@ -58,14 +56,54 @@ func GetById(id string) (User, error) {
 	return usr, nil
 }
 
-func getImageByUser(id string) ([]UserPicture, error) {
-	var pictures []UserPicture
-	err := database.DB.Select(&pictures, "SELECT * FROM user_pictures WHERE user_id = $1", id)
+//get by id and add view record
+func GetOthersById(who string, whom string) (OtherUser, error) {
+
+	var usr OtherUser
+	err := database.DB.Get(&usr, `
+			SELECT 
+				users.id,
+				users.username,
+				users.first_name,
+				users.last_name,
+				users.location,
+				users.fames,
+				users.status,
+				users.last_time_online,
+				users.gender,
+				users.sexual_perference,
+				users.bio,
+				users.profile_picture_id
+			FROM users WHERE id = $1`, whom)
 	if err != nil {
-		return []UserPicture{}, err
+		println("Error", err)
+		return OtherUser{}, fmt.Errorf("User not found")
 	}
-	return pictures, nil
+
+	usr.Pictures, err = Images.GetImageByUser(whom)
+	if err != nil {
+		return OtherUser{}, err
+	}
+
+	usr.Interests, err = Interest.ListByUser(whom)
+	if err != nil {
+		return OtherUser{}, err
+	}
+
+	if who != "0" {
+		_, err = database.DB.NamedExec("INSERT INTO views (who, whom) VALUES (:who, :whom)", map[string]interface{}{
+			"who": who,
+			"whom": whom,
+		})
+		
+		if err != nil {
+			return OtherUser{}, err
+		}
+	}
+
+	return usr, nil
 }
+
 
 // update email, gender, sexual preference, bio
 func UpdateById(_usr User, id string) (User, error) {
@@ -180,65 +218,6 @@ func UpdateById(_usr User, id string) (User, error) {
 	}
 
 	return usr, nil
-}
-
-// update image by id
-func UploadImageToUser(w http.ResponseWriter, img *multipart.FileHeader, id string) error {
-	// Check if the user exists
-	var usr User
-	err := database.DB.Get(&usr, "SELECT * FROM users WHERE id = $1", id)
-	if err != nil {
-		return fmt.Errorf("User not found")
-	}
-
-	file, err := img.Open()
-	if err != nil {
-		return fmt.Errorf("error retrieving the file")
-	}
-	defer file.Close()
-
-	dst, err := os.Create(fmt.Sprintf("/usr/src/app/images/%s", img.Filename))
-	if err != nil {
-		fmt.Println(err)
-		return fmt.Errorf("error creating the file")
-	}
-	defer dst.Close()
-
-	_, err = io.Copy(dst, file)
-	if err != nil {
-		return fmt.Errorf("error copying the file")
-	}
-
-	_, err = database.DB.Exec("INSERT INTO user_pictures (user_id, path) VALUES ($1, $2)", id, img.Filename)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-// delete image by id
-func DeleteImageByUser(imgId, userId string) error {
-	var img UserPicture
-	err := database.DB.Get(&img, "SELECT * FROM user_pictures WHERE id = $1 AND user_id = $2", imgId, userId)
-	if err != nil {
-		return fmt.Errorf("image not found")
-	}
-	
-	println(img.Path)
-
-	_, err = database.DB.Exec("DELETE FROM user_pictures WHERE id = $1", imgId)
-	if err != nil {
-		return err
-	}
-	
-	// err = os.Remove(fmt.Sprintf("images/%s", img.Path))
-	err = os.Remove(fmt.Sprintf("/usr/src/app/images/%s", img.Path))
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
 
 

@@ -9,7 +9,7 @@ import (
 
 )
 
-func ListViewsByUser(w http.ResponseWriter, r *http.Request) {
+func ListConnectionsByUser(w http.ResponseWriter, r *http.Request) {
 	id := r.Header.Get("usrId")
 
 	if id == "" {
@@ -17,13 +17,13 @@ func ListViewsByUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	views, err := GetViewsByUser(id)
+	connections, err := GetConnectionsByUser(id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	json.NewEncoder(w).Encode(views)
+	json.NewEncoder(w).Encode(connections)
 }
 
 func AddViewRecord(w http.ResponseWriter, r *http.Request, id string) error{
@@ -50,24 +50,6 @@ func AddViewRecord(w http.ResponseWriter, r *http.Request, id string) error{
 	}
 	
 	return nil
-}
-
-func ListLikesByUser(w http.ResponseWriter, r *http.Request) {
-	id := r.Header.Get("usrId")
-
-
-	if id == "" {
-		http.Error(w, "usrId is required", http.StatusBadRequest)
-		return
-	}
-
-	likes, err := GetLikesByUser(id)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	json.NewEncoder(w).Encode(likes)
 }
 
 func AddLikeRecord(w http.ResponseWriter, r *http.Request) {

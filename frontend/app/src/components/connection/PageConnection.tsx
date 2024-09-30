@@ -1,15 +1,22 @@
 import React from 'react';
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { Button } from '../widgets/widgets';
 
 export const PageConnection = () => {
+    const navigate = useNavigate();
+
+    const handleNavigation = (path: string) => {
+        navigate(path);
+    };
+
     return (
         <div className="home-page">
-            <h1>My Connections</h1>
-            <p>Welcome to the  page</p>
-            <Link to=''>list</Link>
-            <Link to='chat'>chat</Link>
-            <Link to='date'>date</Link>
+            <div className='w-full flex flex-wrap justify-around pt-3'>
+                <Button label="List" onClick={() => handleNavigation('')} />
+                <Button label="Chat" onClick={() => handleNavigation('chat')} />
+                <Button label="Date" onClick={() => handleNavigation('date')} />
+            </div>
             <Outlet />
         </div>
     );
-}
+};

@@ -1,6 +1,8 @@
 package data
 
-import "time"
+import (
+	"time"
+)
 
 type Views struct {
 	ID          int     	`json:"id"`

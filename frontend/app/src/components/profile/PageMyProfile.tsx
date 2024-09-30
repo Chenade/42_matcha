@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './page-myprofile.css';
-import { Input } from '../widgets/input';
-import { Button } from '../widgets/button';
-import { Checkbox } from '../widgets/checkbox';
-import { Select } from '../widgets/select';
-import { DatePicker } from '../widgets/datepicker';
-import { Upload } from '../widgets/upload';
+import { Input, Select, DatePicker, Checkbox, Button, Upload } from '../widgets/widgets';
 
 // Define types for the profile and pictures
 interface Picture {
@@ -23,6 +18,7 @@ interface Profile {
     SexualPreference: string;
     BirthDate: string;
     Bio: string;
+    ProfilePictureID: number;
     Pictures: Picture[];
 }
 
@@ -40,6 +36,7 @@ export const PageMyProfile = () => {
         SexualPreference: 'unspecified',
         BirthDate: '',
         Bio: '',
+        ProfilePictureID: 0,
         Pictures: [],
     });
 
@@ -69,6 +66,7 @@ export const PageMyProfile = () => {
                 SexualPreference: data.SexualPreference || 'unspecified',
                 BirthDate: data.BirthDate || '',
                 Bio: data.Bio || '',
+                ProfilePictureID: data.ProfilePictureID || 0,
                 Pictures: data.Pictures || [],
             };
             setProfile(fetchedProfile);
@@ -169,18 +167,20 @@ export const PageMyProfile = () => {
     return (
     <div className="home-page flex flex-col lg:flex-row gap-4 mt-4">
         <div className="w-full lg:w-1/3">
-            <div className="flex flex-row lg:flex-col items-center imgsList">
+            <div className="flex flex-row lg:flex-col items-start lg:items-center imgsList">
                 {profile.Pictures && profile.Pictures.length > 0 ? (
                     profile.Pictures.map((picture, index) => (
-                        <div key={index} className="flex flex-col items-center space-x-4 mb-4">
+                        <div key={index} className="img">
                             <img
                                 className="thumbnail"
                                 src={`http://localhost:3000/images/${picture.Path}`}
-                                alt={`Picture ${picture.ID}`}
+                                alt={`${picture.ID}`}
                             />
-                            <div className="flex space-x-2">
-                                <Button label="Set as profile" onClick={() => console.log('Set as profile', index)} />
+                            <div className="flex flex-wrap justify-center space-x-2">
                                 <Button label="Delete" onClick={() => handleDeletePicture(picture.ID)} />
+                                {profile.ProfilePictureID !== picture.ID && (
+                                    <Button label="Set as profile" onClick={() => console.log('Set as profile', index)} />
+                                )}
                             </div>
                         </div>
                     ))
@@ -200,9 +200,9 @@ export const PageMyProfile = () => {
             </div>
         </div>
 
-        <div className="w-full lg:w-2/3 space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Username */}
-            <div className="col-span-1 md:col-span-2">
+        <div className="w-full lg:w-2/3 space-y-4 flex flex-col">
+        {/* Username */}
+            <div>
                 <Input
                     label="Username"
                     placeholder="Enter your username"
@@ -211,28 +211,30 @@ export const PageMyProfile = () => {
                 />
             </div>
 
-            {/* First Name */}
-            <div className="col-span-1">
-                <Input
-                    label="First Name"
-                    placeholder="Enter your first name"
-                    value={profile.FirstName}
-                    onChange={(value) => setProfile({ ...profile, FirstName: value })}
-                />
-            </div>
+            <div className="flex flex-col md:flex-row">
+                {/* First Name */}
+                <div className="w-full">
+                    <Input
+                        label="First Name"
+                        placeholder="Enter your first name"
+                        value={profile.FirstName}
+                        onChange={(value) => setProfile({ ...profile, FirstName: value })}
+                    />
+                </div>
 
-            {/* Last Name */}
-            <div className="col-span-1">
-                <Input
-                    label="Last Name"
-                    placeholder="Enter your last name"
-                    value={profile.LastName}
-                    onChange={(value) => setProfile({ ...profile, LastName: value })}
-                />
+                {/* Last Name */}
+                <div className="w-full">
+                    <Input
+                        label="Last Name"
+                        placeholder="Enter your last name"
+                        value={profile.LastName}
+                        onChange={(value) => setProfile({ ...profile, LastName: value })}
+                    />
+                </div>
             </div>
 
             {/* Email and Verified Checkbox */}
-            <div className="col-span-1 md:col-span-2 flex items-center space-x-4">
+            <div className="flex space-x-4">
                 <Input
                     label="Email"
                     placeholder="Enter your email"
@@ -248,7 +250,7 @@ export const PageMyProfile = () => {
             </div>
 
             {/* Gender Select */}
-            <div className="col-span-1">
+            <div>
                 <Select
                     label="Gender"
                     value={profile.Gender}
@@ -258,7 +260,7 @@ export const PageMyProfile = () => {
             </div>
 
             {/* Sexual Preference Select */}
-            <div className="col-span-1">
+            <div>
                 <Select
                     label="Sexual Preference"
                     value={profile.SexualPreference}
@@ -268,7 +270,7 @@ export const PageMyProfile = () => {
             </div>
 
             {/* Birthdate Picker */}
-            <div className="col-span-1 md:col-span-2">
+            <div className=" md:col-span-2">
                 <DatePicker
                     label="Birthdate"
                     value={profile.BirthDate}
@@ -277,7 +279,7 @@ export const PageMyProfile = () => {
             </div>
 
             {/* Bio Input */}
-            <div className="col-span-1 md:col-span-2">
+            <div>
                 <Input
                     label="Bio"
                     placeholder="Enter your Biography"

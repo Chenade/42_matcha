@@ -1,29 +1,49 @@
 package data
 
 import (
+	"strconv"
 	"api/database"
+	Interest "api/srcs/interests"
+	User "api/srcs/users"
 )
 
-// 
-func GetViewsByUser(id string) ([]Views, error) {
-    var views []Views
-	// select from views and join with user info
-	err := database.DB.Select(&views, "SELECT views.*, users.username FROM views JOIN users ON views.who = users.id WHERE whom = $1", id)
-    if err != nil {
-        return []Views{}, err
-    }
-
-	return views, nil
-}
-
-func GetLikesByUser(id string) ([]Likes, error) {
-	var likes []Likes
-	err := database.DB.Select(&likes, "SELECT likes.*, users.username FROM Flikes JOIN users ON likes.who = users.id WHERE whom = $1", id)
+func GetConnectionsByUser(id string) ([]User.OtherUser, error) {
+	var userInteractions []User.OtherUser
+	query := `
+		SELECT 
+			users.id,
+			users.username,
+			users.first_name,
+			users.last_name,
+			users.location,
+			users.fames,
+			users.status,
+			users.last_time_online,
+			users.gender,
+			users.sexual_perference,
+			users.bio,
+			users.profile_picture_id,
+			COALESCE(likes.who IS NOT NULL, false) AS liked,
+			COALESCE(views.who IS NOT NULL, false) AS viewed
+		FROM users
+        LEFT JOIN likes ON likes.who = users.id AND likes.whom = $1
+        LEFT JOIN views ON views.who = users.id AND views.whom = $1
+        WHERE likes.whom = $1 OR views.whom = $1
+		ORDER BY views.created_at DESC
+	`
+	err := database.DB.Select(&userInteractions, query, id)
 	if err != nil {
-		return []Likes{}, err
+		return []User.OtherUser{}, err
 	}
 
-	return likes, nil
+	for i := range userInteractions {
+		userInteractions[i].Interests, err = Interest.ListByUser(strconv.Itoa(userInteractions[i].UserID))
+		if err != nil {
+			return []User.OtherUser{}, err
+		}
+	}
+
+	return userInteractions, nil
 }
 
 func AddView(view Views) error {

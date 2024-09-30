@@ -16,6 +16,8 @@ import (
 
 	users "api/srcs/users"
 	interests "api/srcs/interests"
+	images "api/srcs/images"
+
 	data "api/srcs/data"
 )
 
@@ -52,16 +54,16 @@ func main() {
 	userMux.HandleFunc(pat.Get("/profile"), users.Profile)
 	userMux.HandleFunc(pat.Put("/profile"), users.Update)
 	userMux.HandleFunc(pat.Get("/profile/:usrId"), users.GetInfo)
-	userMux.HandleFunc(pat.Post("/image"), users.UploadImage)
-	userMux.HandleFunc(pat.Delete("/image"), users.DeleteImage)
 
-	userMux.HandleFunc(pat.Get("/views"), data.ListViewsByUser)
+	userMux.HandleFunc(pat.Post("/image"), images.Upload)
+	userMux.HandleFunc(pat.Delete("/image"), images.Delete)
+	userMux.HandleFunc(pat.Post("/image/profile"), images.SetProfile)
+
+	userMux.HandleFunc(pat.Get("/connections"), data.ListConnectionsByUser)
 	
-	userMux.HandleFunc(pat.Get("/likes"), data.ListLikesByUser)
 	userMux.HandleFunc(pat.Post("/likes/:usrId"), data.AddLikeRecord)
 	userMux.HandleFunc(pat.Delete("/likes/:usrId"), data.RemoveLikeRecord)
 
-	
 	userMux.HandleFunc(pat.Post("/interests"), interests.AddToUser)
 	userMux.HandleFunc(pat.Delete("/interests"), interests.RemoveFromUser)
 
