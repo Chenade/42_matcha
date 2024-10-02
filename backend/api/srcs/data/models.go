@@ -29,7 +29,7 @@ func GetConnectionsByUser(id string) ([]User.OtherUser, error) {
         LEFT JOIN likes ON likes.who = users.id AND likes.whom = $1
         LEFT JOIN views ON views.who = users.id AND views.whom = $1
         WHERE likes.whom = $1 OR views.whom = $1
-		ORDER BY views.created_at DESC
+		ORDER BY views.timestamp DESC
 	`
 	err := database.DB.Select(&userInteractions, query, id)
 	if err != nil {
