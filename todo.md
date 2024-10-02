@@ -18,22 +18,40 @@
     - [X] view all the info
     - [X] upload at least one pictures, up to 5
     - [X] delete the image after uploaded
-    - [ ] Set one of the image as profile photo
+    - [X] Set one of the image as profile photo
+    - [X] connection record (been viewed / liked)
     - [Backend] add / delete interestes (hashtags)
-    - [Create/Read] view record
-    - [Create/Read/Delete] like record
     - [ ] request for GPS positioning
     - [ ] modify their GPS position
 
-- **Chat**
-- **Notification**
-    - Backend:
-        - [ ] Database
-        - [X] websocket
-    - Frontend:
-        - [ ] chatbox
-        - [ ] alert
+- **Others' Profile**
+    - [ ] display all available, except email and password
+    - [ ] display online status (online / last online time)
+    - [ ] display if the user liked / view them
+    - [ ] like / unlike
+    - [ ] must have profile photo to like others
+    - [ ] report as a fake account
+    - [ ] block the user
 
+**Browsing**
+**Search**
+
+- **Chat**
+    - [X] websocket
+    - [ ] Database (who/whom/message/read)
+    - [ ] [Frontend] chatbox
+    - [ ] only chat after matched
+    - [ ] delete after got unmatched
+
+- **Notification**
+    - [X] websocket
+    - [ ] Database (who/whom/message/read)
+    - [ ] [Frontend] alert
+    - [ ] recieves a like
+    - [ ] has been viewed
+    - [ ] recieves a message 
+    - [ ] got matched
+    - [ ] got unmatch
 
 
 ---
