@@ -1,0 +1,47 @@
+.searchInput
+{
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.searchInput label
+{
+    font-size: 1em;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.searchInput input
+{
+    width: 100%;
+    padding: 10px;
+    margin: 5px 5px 0 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 0.9em;
+}   
+
+.searchInput .suggestion
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 0.9em;
+    background-color: white;
+    display: block;
+}
+
+.searchInput .suggestion .option
+{
+    font-size: 0.9em;
+    padding: 5px 0;
+}

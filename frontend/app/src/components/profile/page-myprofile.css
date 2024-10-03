@@ -22,3 +22,17 @@
   padding: 10px;
   object-fit: cover;
 }
+
+
+.badge{
+  color: #f5f5f5;
+  background-color: #846dd7;
+  padding: 0 10px;
+  margin: 0 5px;
+  border-radius: 10px;
+}
+
+.badge-action
+{
+  margin-left: 10px;
+}

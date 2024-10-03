@@ -32,8 +32,8 @@ func main() {
 	//create a new mux
 	mux := goji.NewMux()
 
-	imagesDir := http.FileServer(http.Dir("/usr/src/app/images"))
-	mux.Handle(pat.Get("/images/*"), http.StripPrefix("/images/", imagesDir))
+	imagesDir := http.FileServer(http.Dir("/usr/src/app/uploads"))
+	mux.Handle(pat.Get("/uploads/*"), http.StripPrefix("/uploads/", imagesDir))
 
 	mux.Use(middleware.RequestLogger)
 	mux.Use(middleware.Https)

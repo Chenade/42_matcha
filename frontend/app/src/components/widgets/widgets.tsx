@@ -4,3 +4,5 @@ export { Checkbox } from '../widgets/checkbox';
 export { Select } from '../widgets/select';
 export { DatePicker } from '../widgets/datepicker';
 export { Upload } from '../widgets/upload';
+export { Textbox } from '../widgets/textbox';
+export { SearchInput } from './searchInput';

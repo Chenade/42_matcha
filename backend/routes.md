@@ -15,6 +15,7 @@
 	- GET		/users/profile/:usrId		// get user's profile by id
 	- POST		/users/image				// upload image
 	- DELETE	/users/image?imgId=1		// delete image
+	- POST		/users/image/profile		// update user profile photo
 	- POST		/users/interests			// add interest to user
 	- DELETE	/users/interests			// remove interest from user
 	- GET 		/users/views				// get user's own views
