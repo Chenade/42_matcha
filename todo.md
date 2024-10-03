@@ -25,13 +25,13 @@
     - [ ] modify their GPS position
 
 - **Others' Profile**
-    - [ ] display all available, except email and password
-    - [ ] display online status (online / last online time)
+    - [Frontend] display all available, except email and password
+    - [Frontend] display online status (online / last online time)
     - [ ] display if the user liked / view them
-    - [ ] like / unlike
+    - [Frontend] like / unlike
     - [ ] must have profile photo to like others
-    - [ ] report as a fake account
-    - [ ] block the user
+    - [Frontend] report as a fake account
+    - [Frontend] block the user
 
 **Browsing**
 **Search**
