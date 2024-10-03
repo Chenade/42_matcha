@@ -18,3 +18,9 @@
     background-color: #4723D9;
 }
 
+.button:disabled
+{
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}

@@ -7,6 +7,7 @@ interface searchInputProps {
 
 export const SearchInput = ({
     label,
+    placeholder,
     value,
     options,
     onChange,
@@ -14,6 +15,7 @@ export const SearchInput = ({
 }: {
     label: string;
     value: string;
+    placeholder: string;
     options: searchInputProps[];
     onChange: (value: string) => void;
     onSelected: (value: string) => void;
@@ -23,7 +25,7 @@ export const SearchInput = ({
             <label className="input_label">{label}</label>
             <input
                 className="input_field"
-                placeholder="Type more than 3 characters to search"
+                placeholder={placeholder}
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
 

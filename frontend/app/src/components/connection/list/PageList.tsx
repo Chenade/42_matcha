@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './page-list.css';
+import { useOutletContext } from 'react-router-dom';
 
 interface Interests {
     ID: number;
@@ -24,7 +25,13 @@ interface CardData {
     Interests: Interests[];
 }
 
+interface ContextType {
+    setOpenProfileModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
 export const PageList: React.FC = () => {
+    const { setOpenProfileModal } = useOutletContext<ContextType>();
+
     const [cardData, setCardData] = useState<CardData[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -51,6 +58,10 @@ export const PageList: React.FC = () => {
         fetchCardData();
     }, []);
 
+    const openProfile = (id: number) => {
+        setOpenProfileModal(true);
+    }
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -58,7 +69,7 @@ export const PageList: React.FC = () => {
     return (
         <div className="flex flex-wrap justify-around px-3 py-3">
             {cardData.map((card) => (
-                <div className="card" key={card.UserID}>
+                <div className="card" key={card.UserID} onClick={() => openProfile(card.UserID)}>
                     <div className="card-header">
                         {card.Liked && <span className="liked">Liked You</span>}
                         {card.Viewed && <span className="viewed">Viewed</span>}

@@ -97,7 +97,11 @@ export const PageMyProfile = () => {
                     'Content-Type': 'application/json',
                 },
             });
-            const data = await response.json();
+            var data = [{ ID: '0', Name: value }];
+            const res = await response.json();
+            if (res && res.length > 0) {
+                data.push(...res);
+            }
             setInterests(data);
         } catch (error) {
             console.error('Failed to load interests:', error);
@@ -277,8 +281,10 @@ export const PageMyProfile = () => {
                             />
                             <div className="flex flex-wrap justify-center space-x-2">
                                 <Button label="Delete" onClick={() => handleDeletePicture(picture.ID)} />
-                                {profile.ProfilePictureID !== picture.ID && (
+                                {profile.ProfilePictureID !== picture.ID ? (
                                     <Button label="Set as profile" onClick={() => setAsProfilePicture(picture.ID)} />
+                                ) : (
+                                    <Button label="Profile Picture" disabled={true} onClick={() => void 0} />
                                 )}
                             </div>
                         </div>
@@ -390,6 +396,7 @@ export const PageMyProfile = () => {
 
             <SearchInput
                 label="Interests"
+                placeholder="Type more than 3 characters to contiune..."
                 value={keyword}
                 options={interests}
                 onChange={(value) => fetchInterests(value)}
