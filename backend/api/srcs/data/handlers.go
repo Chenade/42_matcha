@@ -107,5 +107,5 @@ func RemoveLikeRecord(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	json.NewEncoder(w).Encode("Like added")
+	json.NewEncoder(w).Encode("Like removed")
 }

@@ -21,10 +21,20 @@ func checkInterest(interest string) (int) {
 
 func List(w http.ResponseWriter, r *http.Request) {
 	var interests []Interest
-	err := database.DB.Select(&interests, "SELECT * FROM interests")
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	var keyword string
+	if r.URL.Query().Get("keyword") != "" {
+		keyword = r.URL.Query().Get("keyword")
+		err := database.DB.Select(&interests, "SELECT * FROM interests WHERE name LIKE $1 LIMIT 10", "%"+keyword+"%")
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	} else {
+		err := database.DB.Select(&interests, "SELECT * FROM interests LIMIT 10")
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 	}
 
 	returnValJson, _ := json.Marshal(interests)

@@ -10,7 +10,7 @@ import (
 func GetConnectionsByUser(id string) ([]User.OtherUser, error) {
 	var userInteractions []User.OtherUser
 	query := `
-		SELECT 
+		SELECT DISTINCT ON (users.id)
 			users.id,
 			users.username,
 			users.first_name,
@@ -26,10 +26,11 @@ func GetConnectionsByUser(id string) ([]User.OtherUser, error) {
 			COALESCE(likes.who IS NOT NULL, false) AS liked,
 			COALESCE(views.who IS NOT NULL, false) AS viewed
 		FROM users
-        LEFT JOIN likes ON likes.who = users.id AND likes.whom = $1
-        LEFT JOIN views ON views.who = users.id AND views.whom = $1
-        WHERE likes.whom = $1 OR views.whom = $1
-		ORDER BY views.timestamp DESC
+		LEFT JOIN likes ON likes.who = users.id AND likes.whom = $1
+		LEFT JOIN views ON views.who = users.id AND views.whom = $1
+		WHERE likes.whom = $1 OR views.whom = $1
+		ORDER BY users.id, views.timestamp DESC;
+
 	`
 	err := database.DB.Select(&userInteractions, query, id)
 	if err != nil {

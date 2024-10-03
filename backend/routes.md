@@ -1,8 +1,7 @@
 # ft_matcha
 
 ---
-## API routes
-### 
+### API routes
 	- POST		/sign-up					// create a new user
 	- POST		/login						// login
 	- GET		/users						// get all users
@@ -20,5 +19,7 @@
 	- DELETE	/users/interests			// remove interest from user
 	- GET 		/users/views				// get user's own views
 	- GET 		/users/likes				// get user's own likes 
+	- POST		/users/likes:usrId			// like other user with id
+	- DELETE	/users/likes:usrId			// unlike other user with id
 	
 	
