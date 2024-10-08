@@ -25,8 +25,8 @@
     - [ ] modify their GPS position
 
 - **Others' Profile**
-    - [Frontend] display all available, except email and password
-    - [Frontend] display online status (online / last online time)
+    - [X] display all available, except email and password
+    - [X] display online status (online / last online time)
     - [ ] display if the user liked / view them
     - [Frontend] like / unlike
     - [ ] must have profile photo to like others
