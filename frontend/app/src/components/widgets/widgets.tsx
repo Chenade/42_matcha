@@ -6,3 +6,4 @@ export { DatePicker } from '../widgets/datepicker';
 export { Upload } from '../widgets/upload';
 export { Textbox } from '../widgets/textbox';
 export { SearchInput } from './searchInput';
+export { ImgSlideshow } from '../widgets/imgSlideshow';

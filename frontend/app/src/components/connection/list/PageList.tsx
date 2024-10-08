@@ -19,7 +19,7 @@ interface CardData {
     Gender: string;
     SexualPreference: string;
     Bio: string;
-    ProfilePictureID: number;
+    ProfilePic: string;
     Liked: boolean;
     Viewed: boolean;
     Interests: Interests[];
@@ -27,10 +27,12 @@ interface CardData {
 
 interface ContextType {
     setOpenProfileModal: React.Dispatch<React.SetStateAction<boolean>>;
+    setProfileData: React.Dispatch<React.SetStateAction<{}>>;
 }
 
 export const PageList: React.FC = () => {
     const { setOpenProfileModal } = useOutletContext<ContextType>();
+    const { setProfileData } = useOutletContext<ContextType>();
 
     const [cardData, setCardData] = useState<CardData[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -59,6 +61,52 @@ export const PageList: React.FC = () => {
     }, []);
 
     const openProfile = (id: number) => {
+        // fetch data from /users/profile/:usrId
+        const fetchProfileData = async () => {
+            try {
+                const response = await fetch(`http://localhost:3000/users/profile/${id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    },
+                });
+                const data = await response.json();
+
+
+                const fetchedProfile = {
+                    Online: data.Online || false,
+                    LastOnline: new Date(data.LastTimeOnline).toLocaleString() || '',
+                    Username: data.Username || '',
+                    FirstName: data.FirstName || '',
+                    LastName: data.LastName || '',
+                    Gender: data.Gender || 'unspecified',
+                    SexualPreference: data.SexualPreference || 'unspecified',
+                    BirthDate: data.BirthDate || '',
+                    Bio: data.Bio || '',
+                    Fames: data.Fames || 0,
+                    ProfilePic: {
+                        ID: 0,
+                        Path: 'https://via.placeholder.com/350'
+                    },
+                    Pictures: data.Pictures || [],
+                    Interests: data.Interests || [],
+                };
+
+
+                data.Pictures && data.Pictures.forEach((picture: any) => {
+                    if (data.ProfilePictureID === picture.ID) {
+                        fetchedProfile.ProfilePic = picture;
+                    }
+                });
+
+                setProfileData(fetchedProfile);
+                console.log('Profile data:', data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+        fetchProfileData();
         setOpenProfileModal(true);
     }
 
@@ -76,7 +124,7 @@ export const PageList: React.FC = () => {
                     </div>
                     <div className="card-body">
                         <div className="card-thumbnail">
-                            <img src='https://via.placeholder.com/150' alt="thumbnail" />
+                            <img src={'http://localhost:3000/uploads/' + card.ProfilePic} alt="thumbnail" />
                             {/* <img src={card.thumbnailUrl} alt="thumbnail" /> */}
                         </div>
                         <div className="card-title">
