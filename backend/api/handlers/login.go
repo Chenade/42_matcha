@@ -10,7 +10,7 @@ import (
 
 	// "goji.io/pat"
 	"api/database"
-	users "api/database/users"
+	users "api/srcs/users"
 )
 
 type UserRegistration struct {

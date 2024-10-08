@@ -1,5 +1,6 @@
 CREATE TABLE likes (
     id      	SERIAL                      PRIMARY KEY,
-    user_id		Integer NOT NULL,
+    who integer REFERENCES users(id),
+    whom integer REFERENCES users(id),
 	created_at 	TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

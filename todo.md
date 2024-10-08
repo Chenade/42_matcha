@@ -1,9 +1,9 @@
 # ft_matcha
 
 - Setting
-    - [ ] env: docker
-    - [ ] backend: golang
-    - [ ] frontend: ReactJs
+    - [X] env: docker
+    - [X] backend: golang
+    - [X] frontend: ReactJs
 
 - **User Login**
     - [ ] Registration: email, username, last name, first name, password(somehow protected)
@@ -13,11 +13,42 @@
     - [ ] Log Out: one click from any page
 
 - **User Profile**
+    - [X] fill out gender, sexual perference, biography
+    - [X] modify basic info (name, email)
+    - [X] view all the info
+    - [X] upload at least one pictures, up to 5
+    - [X] delete the image after uploaded
+    - [X] Set one of the image as profile photo
+    - [X] connection record (been viewed / liked)
+    - [X] add / delete interestes (hashtags)
+    - [ ] request for GPS positioning
+    - [ ] modify their GPS position
+
+- **Others' Profile**
+    - [X] display all available, except email and password
+    - [X] display online status (online / last online time)
+    - [ ] display if the user liked / view them
+    - [Frontend] like / unlike
+    - [ ] must have profile photo to like others
+    - [Frontend] report as a fake account
+    - [Frontend] block the user
+
+**Browsing**
+**Search**
+
 - **Chat**
+    - [X] websocket
+    - [ ] Database (who/whom/message/read)
+    - [ ] [Frontend] chatbox
+    - [ ] only chat after matched
+    - [ ] delete after got unmatched
+
 - **Notification**
-    - Backend:
-        - [ ] Database
-        - [ ] websocket
-    - Frontend:
-        - [ ] chatbox
-        - [ ] alert
+    - [X] websocket
+    - [ ] Database (who/whom/message/read)
+    - [ ] [Frontend] alert
+    - [ ] recieves a like
+    - [ ] has been viewed
+    - [ ] recieves a message 
+    - [ ] got matched
+    - [ ] got unmatch

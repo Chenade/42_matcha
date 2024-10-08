@@ -11,5 +11,11 @@ CREATE TABLE users (
     status              VARCHAR(255)    DEFAULT 'offline',
     last_time_online    TIMESTAMP       DEFAULT CURRENT_TIMESTAMP,
     two_fa_method       VARCHAR(255),
-    two_fa_code         VARCHAR(255)
+    two_fa_code         VARCHAR(255),
+
+    gender              VARCHAR(255)    DEFAULT 'unspecified',
+    sexual_perference   VARCHAR(255)    DEFAULT 'unspecified',
+    bio                 TEXT,
+    profile_picture_id  INTEGER,
+    birth_date          DATE    
 );

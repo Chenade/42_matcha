@@ -1,6 +1,6 @@
 CREATE TABLE views (
     id SERIAL PRIMARY KEY,
-    who UUID,
-    whom UUID,
-    timestamp TIMESTAMP
+    who integer REFERENCES users(id),
+    whom integer REFERENCES users(id),
+    timestamp TIMESTAMP DEFAULT NOW()
 );
