@@ -21,6 +21,15 @@ func GetImageByUser(id string) ([]UserPicture, error) {
 	return pictures, nil
 }
 
+func GetById(id string) (string, error) {
+	var img UserPicture
+	err := database.DB.Get(&img, "SELECT path FROM user_pictures WHERE id = $1", id)
+	if err != nil {
+		return "", fmt.Errorf("image not found")
+	}
+	return img.Path, nil
+}
+
 // update image by id
 func UploadImageToUser(w http.ResponseWriter, img *multipart.FileHeader, id string) error {
 	file, err := img.Open()

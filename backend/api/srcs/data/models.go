@@ -5,6 +5,7 @@ import (
 	"api/database"
 	Interest "api/srcs/interests"
 	User "api/srcs/users"
+	Images "api/srcs/images"
 )
 
 func GetConnectionsByUser(id string) ([]User.OtherUser, error) {
@@ -39,6 +40,10 @@ func GetConnectionsByUser(id string) ([]User.OtherUser, error) {
 
 	for i := range userInteractions {
 		userInteractions[i].Interests, err = Interest.ListByUser(strconv.Itoa(userInteractions[i].UserID))
+		if err != nil {
+			return []User.OtherUser{}, err
+		}
+		userInteractions[i].ProfilePic, err = Images.GetById(strconv.Itoa(*userInteractions[i].ProfilePictureID))
 		if err != nil {
 			return []User.OtherUser{}, err
 		}
