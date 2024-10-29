@@ -90,6 +90,16 @@ func GetOthersById(who string, whom string) (OtherUser, error) {
 		return OtherUser{}, err
 	}
 
+	err = database.DB.Get(&usr.Liked, "SELECT EXISTS(SELECT 1 FROM likes WHERE who = $1 AND whom = $2)", who, whom)
+	if err != nil {
+		return OtherUser{}, err
+	}
+
+	err = database.DB.Get(&usr.Matched, "SELECT EXISTS(SELECT 1 FROM matches WHERE (user_1 = $1 AND user_2 = $2) OR (user_1 = $2 AND user_2 = $1))", who, whom)
+	if err != nil {
+		return OtherUser{}, err
+	}
+
 	if who != "0" {
 		_, err = database.DB.NamedExec("INSERT INTO views (who, whom) VALUES (:who, :whom)", map[string]interface{}{
 			"who": who,

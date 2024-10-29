@@ -67,7 +67,23 @@ func AddLikeRecord(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, "Invalid usrId", http.StatusBadRequest)
 		return
-	}	
+	}
+
+	if num_id == usr_id {
+		http.Error(w, "You can't like yourself", http.StatusBadRequest)
+		return
+	}
+
+	// Check if the user has already liked the other user
+	likes, err := GetLikes(Likes{ Who: usr_id, Whom: num_id,})
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if len(likes) > 0 {
+		http.Error(w, "You have already liked this user", http.StatusBadRequest)
+		return
+	}
 
 	err = AddLike(Likes{
 		Who: usr_id,
@@ -77,6 +93,24 @@ func AddLikeRecord(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
+	// Check if the other user has liked the user
+	likes, err = GetLikes(Likes{ Who: num_id, Whom: usr_id,})
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if len(likes) > 0 {
+		err = AddMatch(Matches{
+			User_1: usr_id,
+			User_2: num_id,
+		})
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+
 
 	json.NewEncoder(w).Encode("Like added")
 }
@@ -96,7 +130,7 @@ func RemoveLikeRecord(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, "Invalid usrId", http.StatusBadRequest)
 		return
-	}	
+	}
 
 	err = RemoveLike(Likes{
 		Who: usr_id,
@@ -107,5 +141,22 @@ func RemoveLikeRecord(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Check if the other user has liked the user
+	likes, err := GetLikes(Likes{ Who: num_id, Whom: usr_id,})
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if len(likes) > 0 {
+		err = RemoveMatch(Matches{
+			User_1: usr_id,
+			User_2: num_id,
+		})
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+	
 	json.NewEncoder(w).Encode("Like removed")
 }
