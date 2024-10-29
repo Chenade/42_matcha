@@ -19,7 +19,7 @@ export const PageNavigation = () => {
 
     // get cursor point 
     const toggleClickHandler = () => {
-        // setCursorPosition({ x: e.clientX, y: e.clientY });
+        // setCursorPosition({ x: e.clientX, y: e.clientY });z
 
         const nav = document.getElementById('nav-bar');
         const bodypd = document.getElementById('body-container');

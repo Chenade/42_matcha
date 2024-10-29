@@ -403,7 +403,7 @@ export const PageMyProfile = () => {
                 onSelected={(value) => addInterest(value)}
             />
 
-            <div className="w-full flex justify-start">
+            <div className="w-full flex justify-start flex-wrap">
                 {profile.Interests && profile.Interests.map((interest, index) => (
                     <div key={index} className="badge">
                         <span>{interest.Name}</span>

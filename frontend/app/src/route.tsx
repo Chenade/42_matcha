@@ -6,8 +6,10 @@ import { PageNavigation } from './components/navigation/PageNavigation';
 import { PageExplorer } from './components/browse/PageExplorer';
 import { PageConnection } from './components/connection/PageConnection';
 import { PageMyProfile } from './components/profile/PageMyProfile';
-import { PageChat } from './components/connection/chat/PageChat';
-import { PageDate } from './components/connection/date/PageDate';
+// import { PageChat } from './components/connection/chat/PageChat';
+// import { PageDate } from './components/connection/date/PageDate';
+import { PageMyDates } from './components/dates/PageMyDates';
+import { PageChats } from './components/chats/PageChats';
 import { PageList } from './components/connection/list/PageList';
 import { PageRegistration } from './components/login/PageRegistration';
 import { PageForgotPassword } from './components/login/PageForgotPassword';
@@ -29,26 +31,34 @@ const router = createBrowserRouter([
                 element: <PageExplorer />,
             },
             {
-                path: '/connection',
+                path: '/connections',
                 element: <PageConnection />,
                 children: [
                     {
                         index: true,
                         element: <PageList/>,
                     },
-                    {
-                        path: '/connection/chat',
-                        element: <PageChat />,
-                    },
-                    {
-                        path: '/connection/date',
-                        element: <PageDate />,
-                    },
+                    // {
+                    //     path: '/connection/chat',
+                    //     element: <PageChat />,
+                    // },
+                    // {
+                    //     path: '/connection/date',
+                    //     element: <PageDate />,
+                    // },
                 ]
             },
             {
                 path: '/me',
                 element: <PageMyProfile />,
+            },
+            {
+                path: '/dates',
+                element: <PageMyDates />,
+            },
+            {
+                path: '/chats',
+                element: <PageChats />,
             },
         ],
     },

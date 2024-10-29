@@ -14,6 +14,7 @@ interface Picture {
 }
 
 interface OthersProfile {
+    UserID: number;
     Online: boolean;
     LastOnline: string;
     Username: string;
@@ -27,6 +28,7 @@ interface OthersProfile {
     ProfilePic: Picture;
     Pictures: Picture[];
     Interests?: Interests[];
+    Matched: boolean;
 }
 
 export const PageConnection = () => {
@@ -39,6 +41,7 @@ export const PageConnection = () => {
     const [openProfileModal, setOpenProfileModal] = React.useState(false);
     const [prorileData, setProfileData] = useState<OthersProfile>(
         {
+            UserID: 0,
             Online: false,
             LastOnline: '',
             Username: '',
@@ -55,31 +58,52 @@ export const PageConnection = () => {
             },
             Pictures: [],
             Interests: [],
+            Matched: false,
         }
 
     );
 
+    const ActionButton = (user_id: number, action: string) => {
+        fetch(`http://localhost:3000/users/${user_id}/${action}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            },
+            body: JSON.stringify({
+                user_id: user_id,
+            }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
     return (
         <div className="home-page">
-            <div className='w-full flex flex-wrap justify-around pt-3'>
+            {/* <div className='w-full flex flex-wrap justify-around pt-3'>
                 <Button label="List" onClick={() => handleNavigation('')} />
                 <Button label="Chat" onClick={() => handleNavigation('chat')} />
                 <Button label="Date" onClick={() => handleNavigation('date')} />
-            </div>
+            </div> */}
             <Outlet context={{ setOpenProfileModal, setProfileData }} />
 
             <div className={`modal ${openProfileModal ? 'open' : ''}`} id="profileModal">
                 <div className='modal-content'>
                     <span className="close" onClick={() => setOpenProfileModal(false)}>&times;</span>
                     <div className="flex flex-col lg:flex-row mb-5">
-                        <ImgSlideshow 
+                        <ImgSlideshow
                             img={prorileData.Pictures.map(picture => 'http://localhost:3000/uploads/' + picture.Path)}
                         />
                         <div className="w-full profile">
                             <p className='username'>{prorileData.Username}</p>
                             <p className='realname'>{prorileData.FirstName}, {prorileData.LastName}</p>
                             <hr className='my-1'></hr>
-                            {prorileData.Online ? <p className='online'>Online Now</p> : <p className=''><span>Last Active: </span> {prorileData.LastOnline}</p> }
+                            {prorileData.Online ? <p className='online'>Online Now</p> : <p className=''><span>Last Active: </span> {prorileData.LastOnline}</p>}
                             <hr className='my-1'></hr>
                             <p className='info'><span>Birthdate: </span> {prorileData.BirthDate}</p>
                             <p className='info'><span>Gender: </span> {prorileData.Gender}</p>
@@ -99,8 +123,10 @@ export const PageConnection = () => {
                         </div>
                     </div>
                     <div className="flex flex-wrap justify-center">
-                        <Button label="Like" onClick={() => handleNavigation('')} />
-                        <Button label="Report" onClick={() => handleNavigation('')} />
+                        { prorileData.Matched && <Button label="Chat" onClick={() => handleNavigation('chat')} />}
+                        { prorileData.Matched && <Button label="Unlike" onClick={() => ActionButton(prorileData.UserID, 'unlike')} />}
+                        { !prorileData.Matched && <Button label="Like" onClick={() => ActionButton(prorileData.UserID, 'like')} />}
+                        <Button label="Report" onClick={() => ActionButton(prorileData.UserID, 'report')} />
                     </div>
                 </div>
             </div>
