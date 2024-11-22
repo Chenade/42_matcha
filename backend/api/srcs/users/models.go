@@ -90,7 +90,12 @@ func GetOthersById(who string, whom string) (OtherUser, error) {
 		return OtherUser{}, err
 	}
 
-	err = database.DB.Get(&usr.Liked, "SELECT EXISTS(SELECT 1 FROM likes WHERE who = $1 AND whom = $2)", who, whom)
+	err = database.DB.Get(&usr.Like, "SELECT EXISTS(SELECT 1 FROM likes WHERE who = $1 AND whom = $2)", who, whom)
+	if err != nil {
+		return OtherUser{}, err
+	}
+
+	err = database.DB.Get(&usr.Liked, "SELECT EXISTS(SELECT 1 FROM likes WHERE who = $1 AND whom = $2)", whom, who)
 	if err != nil {
 		return OtherUser{}, err
 	}

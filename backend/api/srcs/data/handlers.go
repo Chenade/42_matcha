@@ -109,6 +109,8 @@ func AddLikeRecord(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		json.NewEncoder(w).Encode("Matched")
+		return
 	}
 
 
@@ -142,7 +144,7 @@ func RemoveLikeRecord(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Check if the other user has liked the user
-	likes, err := GetLikes(Likes{ Who: num_id, Whom: usr_id,})
+	likes, err := GetMatches(Matches{ User_1: usr_id, User_2: num_id,})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
