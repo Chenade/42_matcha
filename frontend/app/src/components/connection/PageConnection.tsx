@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import "./PageConnection.css";
-import { Profile } from '../modal/Profile';
+import { Profile } from '../resources/modal/Profile';
 
 interface Interests {
     ID: number;

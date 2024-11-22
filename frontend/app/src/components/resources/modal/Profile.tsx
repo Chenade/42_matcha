@@ -2,7 +2,7 @@ import React from 'react';
 import './profile.css';
 import './modal.css';
 import { useNavigate } from 'react-router-dom';
-import { Button, ImgSlideshow } from '../widgets/widgets';
+import { Button, ImgSlideshow } from '../../resources/widgets/widgets';
 
 interface Picture {
     ID: number;

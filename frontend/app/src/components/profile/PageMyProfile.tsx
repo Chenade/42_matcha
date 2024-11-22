@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './page-myprofile.css';
-import { Input, Select, DatePicker, Checkbox, Button, Upload, Textbox, SearchInput } from '../widgets/widgets';
+import { Input, Select, DatePicker, Checkbox, Button, Upload, Textbox, SearchInput } from '../resources/widgets/widgets';
+
+import { useNotification } from '../resources/notifications/NotificationContext';
 
 // Define types for the profile and pictures
 interface Picture {
@@ -33,6 +35,8 @@ export const PageMyProfile = () => {
     const [interests, setInterests] = useState<MultiSelectProps[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+
+    const { addNotification } = useNotification();
 
     const [profile, setProfile] = useState<Profile>({
         Username: '',
@@ -103,8 +107,10 @@ export const PageMyProfile = () => {
                 data.push(...res);
             }
             setInterests(data);
+            addNotification('success', 'Interests loaded successfully');
         } catch (error) {
-            console.error('Failed to load interests:', error);
+            addNotification('error', 'Failed to load interests');
+            // console.error('Failed to load interests:', error);
         }
     }
 
@@ -139,14 +145,17 @@ export const PageMyProfile = () => {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('Profile saved successfully:', data);
                 setOriginalProfile(profile); // Update originalProfile after saving
                 setUnsavedChanges(false);
+                addNotification('success', 'Profile saved successfully');
+                // console.log('Profile saved successfully:', data);
             } else {
-                console.error('Failed to save profile:', response.statusText);
+                addNotification('error', 'Failed to save profile');
+                // console.error('Failed to save profile:', response.statusText);
             }
         } catch (error) {
-            console.error('Error occurred while saving profile:', error);
+            addNotification('error', 'Error occurred while saving profile');
+            // console.error('Error occurred while saving profile:', error);
         }
     };
 
@@ -164,14 +173,16 @@ export const PageMyProfile = () => {
             });
 
             if (response.ok) {
-                const data = await response.json();
-                console.log('Picture uploaded successfully:', data);
                 fetchProfile();
+                addNotification('success', 'Picture uploaded successfully');
+                // console.log('Picture uploaded successfully:', data);
             } else {
-                console.error('Failed to upload picture:', response.statusText);
+                addNotification('error', 'Failed to upload picture');
+                // console.error('Failed to upload picture:', response.statusText);
             }
         } catch (error) {
-            console.error('Error occurred while uploading picture:', error);
+            addNotification('error', 'Error occurred while uploading picture');
+            // console.error('Error occurred while uploading picture:', error);
         }
     };
 
@@ -185,14 +196,17 @@ export const PageMyProfile = () => {
             });
 
             if (response.ok) {
-                const data = await response.json();
-                console.log('Picture deleted successfully:', data);
+                // const data = await response.json();
                 fetchProfile();
+                addNotification('success', 'Picture deleted successfully');
+                // console.log('Picture deleted successfully:', data);
             } else {
-                console.error('Failed to delete picture:', response.statusText);
+                addNotification('error', "Failed to delete picture");
+                // console.error('Failed to delete picture:', response.statusText);
             }
         } catch (error) {
-            console.error('Error occurred while deleting picture:', error);
+            addNotification('error', 'Error occurred while deleting picture');
+            // console.error('Error occurred while deleting picture:', error);
         }
     };
 
@@ -210,14 +224,18 @@ export const PageMyProfile = () => {
             });
 
             if (response.ok) {
-                const data = await response.json();
-                console.log('Interest added successfully:', data);
+                // const data = await response.json();
                 fetchProfile();
+                addNotification('success', 'Interest added successfully');
+                // console.log('Interest added successfully:', data);
+                
             } else {
-                console.error('Failed to add interest:', response.statusText);
+                addNotification('error', 'Failed to add interest');
+                // console.error('Failed to add interest:', response.statusText);
             }
         } catch (error) {
-            console.error('Error occurred while adding interest:', error);
+            addNotification('error', 'Error occurred while adding interest');
+            // console.error('Error occurred while adding interest:', error);
         }
     }
 
@@ -233,13 +251,16 @@ export const PageMyProfile = () => {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('Interest deleted successfully:', data);
                 fetchProfile();
+                addNotification('success', 'Interest deleted successfully');
+                // console.log('Interest deleted successfully:', data);
             } else {
-                console.error('Failed to delete interest:', response.statusText);
+                addNotification('error', 'Failed to delete interest');
+                // console.error('Failed to delete interest:', response.statusText);
             }
         } catch (error) {
-            console.error('Error occurred while deleting interest:', error);
+            addNotification('error', 'Error occurred while deleting interest');
+            // console.error('Error occurred while deleting interest:', error);
         }
     }
 
@@ -254,13 +275,16 @@ export const PageMyProfile = () => {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('Profile picture set successfully:', data);
                 fetchProfile();
+                addNotification('success', 'Profile picture set successfully');
+                // console.log('Profile picture set successfully:', data);
             } else {
-                console.error('Failed to set profile picture:', response.statusText);
+                addNotification('error', 'Failed to set profile picture');
+                // console.error('Failed to set profile picture:', response.statusText);
             }
         } catch (error) {
-            console.error('Error occurred while setting profile picture:', error);
+            addNotification('error', 'Error occurred while setting profile picture');
+            // console.error('Error occurred while setting profile picture:', error);
         }
     }
 
@@ -268,7 +292,7 @@ export const PageMyProfile = () => {
     if (error) return <p>{error}</p>;
 
     return (
-    <div className="home-page flex flex-col lg:flex-row gap-4 mt-4">
+        <div className="home-page flex flex-col lg:flex-row gap-4 mt-4">
         <div className="w-full lg:w-1/3">
             <div className="flex flex-row lg:flex-col items-start lg:items-center imgsList">
                 {profile.Pictures && profile.Pictures.length > 0 ? (

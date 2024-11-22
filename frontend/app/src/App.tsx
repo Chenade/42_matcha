@@ -4,10 +4,16 @@ import React from 'react';
 import { RouterProvider } from 'react-router-dom';
 import router from './route';
 
+import { NotificationProvider } from './components/resources/notifications/NotificationContext';
+import NotificationOverlay from './components/resources/notifications/NotificationOverlay';
+
 const App: React.FC = () => {
     localStorage.setItem('token', '2');
     return (
-        <RouterProvider router={router} />
+        <NotificationProvider>
+            <NotificationOverlay />
+            <RouterProvider router={router} />
+        </NotificationProvider>
     );
 };
 
