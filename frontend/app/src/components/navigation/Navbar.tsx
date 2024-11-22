@@ -58,7 +58,7 @@ export const Navbar = ({
 					<NavbarMenuItem
 						onClickMenuItem={() => setPageTitle('My Connections')}
 						menuItemLabel="Connections"
-						pagePath="/connection"
+						pagePath="/connections"
 					/>
 					<NavbarMenuItem
 						onClickMenuItem={() => setPageTitle('Chats')}

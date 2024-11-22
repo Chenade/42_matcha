@@ -1,16 +1,41 @@
-import React, { useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
-import { Button, ImgSlideshow } from '../widgets/widgets';
+import React, { useEffect, useState } from 'react';
 import "./PageConnection.css";
+import { Profile } from '../modal/Profile';
 
 interface Interests {
     ID: number;
     Name: string;
 }
 
+interface Connections {
+    Matched: CardData[];
+    Liked: CardData[];
+    Viewed: CardData[];
+}
+
 interface Picture {
     ID: number;
     Path: string;
+}
+
+interface CardData {
+    UserID: number;
+    Username: string;
+    FirstName: string;
+    LastName: string;
+    Location: string;
+    Fames: number;
+    Status: string;
+    LastTimeOnline: string;
+    Gender: string;
+    SexualPreference: string;
+    Bio: string;
+    ProfilePic: string;
+    Liked: boolean;
+    Like: boolean;
+    Viewed: boolean;
+    Matched: boolean;
+    Interests: Interests[];
 }
 
 interface OthersProfile {
@@ -29,17 +54,18 @@ interface OthersProfile {
     Pictures: Picture[];
     Interests?: Interests[];
     Matched: boolean;
+    Liked: boolean;
+    Like: boolean;
 }
 
+
 export const PageConnection = () => {
-    const navigate = useNavigate();
-
-    const handleNavigation = (path: string) => {
-        navigate(path);
-    };
-
+    
     const [openProfileModal, setOpenProfileModal] = React.useState(false);
-    const [prorileData, setProfileData] = useState<OthersProfile>(
+    const [loading, setLoading] = useState<boolean>(true);
+    const [connectionType] = useState<string[]>(['Matched', 'Liked', 'Viewed']);
+
+    const [profileData, setProfileData] = useState<OthersProfile>(
         {
             UserID: 0,
             Online: false,
@@ -59,77 +85,165 @@ export const PageConnection = () => {
             Pictures: [],
             Interests: [],
             Matched: false,
+            Liked: false,
+            Like: false,
         }
 
     );
 
-    const ActionButton = (user_id: number, action: string) => {
-        fetch(`http://localhost:3000/users/${user_id}/${action}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            },
-            body: JSON.stringify({
-                user_id: user_id,
-            }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
+    const [cardData] = useState<Connections>({
+        Matched: [],
+        Liked: [],
+        Viewed: [],
+    } as Connections);
+
+    const togglelist = (category: string) => () => {
+        const categoryBox = document.querySelector(`.category-box[data-category='${category}']`);
+        if (categoryBox) {
+            categoryBox.classList.toggle('view');
+        }
+    }
+
+    const fetchProfileData = async (id: number) => {
+        try {
+            const response = await fetch(`http://localhost:3000/users/profile/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                },
             });
+            const data = await response.json();
+
+            const fetchedProfile = {
+                UserID: data.UserID || 0,
+                Online: data.Online || false,
+                LastOnline: new Date(data.LastTimeOnline).toLocaleString() || '',
+                Username: data.Username || '',
+                FirstName: data.FirstName || '',
+                LastName: data.LastName || '',
+                Gender: data.Gender || 'unspecified',
+                SexualPreference: data.SexualPreference || 'unspecified',
+                BirthDate: data.BirthDate || '',
+                Bio: data.Bio || '',
+                Fames: data.Fames || 0,
+                ProfilePic: {
+                    ID: 0,
+                    Path: 'https://via.placeholder.com/350'
+                },
+                Pictures: data.Pictures || [],
+                Interests: data.Interests || [],
+                Matched: data.Matched || false,
+                Liked: data.Liked || false,
+                Like: data.Like || false,
+            };
+
+            data.Pictures && data.Pictures.forEach((picture: any) => {
+                if (data.ProfilePictureID === picture.ID) {
+                    fetchedProfile.ProfilePic = picture;
+                }
+            });
+
+            setProfileData(fetchedProfile);
+            // console.log('Profile data:', data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+
+    const openProfile = (id: number) => {
+        // fetch data from /users/profile/:usrId
+        fetchProfileData(id);
+        setOpenProfileModal(true);
+    }
+
+    useEffect(() => {
+        const fetchCardData = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/users/connections', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    },
+                });
+                const data = await response.json();
+                cardData.Liked = [];
+                cardData.Viewed = [];
+                cardData.Matched = [];
+                for (const el in data) {
+                    if (data[el].Matched) {
+                        cardData.Matched.push(data[el]);
+                    }
+                    else if (data[el].Liked) {
+                        cardData.Liked.push(data[el]);
+                    }
+                    else {
+                        cardData.Viewed.push(data[el]);
+                    }
+                }
+                // setCardData(data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchCardData();
+    },[profileData, cardData]);
+
+    if (loading) {
+        return <div>Loading...</div>;
     }
 
     return (
         <div className="home-page">
-            {/* <div className='w-full flex flex-wrap justify-around pt-3'>
-                <Button label="List" onClick={() => handleNavigation('')} />
-                <Button label="Chat" onClick={() => handleNavigation('chat')} />
-                <Button label="Date" onClick={() => handleNavigation('date')} />
-            </div> */}
-            <Outlet context={{ setOpenProfileModal, setProfileData }} />
-
-            <div className={`modal ${openProfileModal ? 'open' : ''}`} id="profileModal">
-                <div className='modal-content'>
-                    <span className="close" onClick={() => setOpenProfileModal(false)}>&times;</span>
-                    <div className="flex flex-col lg:flex-row mb-5">
-                        <ImgSlideshow
-                            img={prorileData.Pictures.map(picture => 'http://localhost:3000/uploads/' + picture.Path)}
-                        />
-                        <div className="w-full profile">
-                            <p className='username'>{prorileData.Username}</p>
-                            <p className='realname'>{prorileData.FirstName}, {prorileData.LastName}</p>
-                            <hr className='my-1'></hr>
-                            {prorileData.Online ? <p className='online'>Online Now</p> : <p className=''><span>Last Active: </span> {prorileData.LastOnline}</p>}
-                            <hr className='my-1'></hr>
-                            <p className='info'><span>Birthdate: </span> {prorileData.BirthDate}</p>
-                            <p className='info'><span>Gender: </span> {prorileData.Gender}</p>
-                            <p className='info'><span>Sexual Preference: </span> {prorileData.SexualPreference}</p>
-                            <p className='info'><span>Location: </span> Location</p>
-                            <hr className='my-1'></hr>
-                            <p className='bio'>{prorileData.Bio}</p>
-                            {prorileData.Bio && <hr className='my-1'></hr>}
-                            {/* <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p> */}
-                            {prorileData.Interests && prorileData.Interests.length > 0 && (
-                                <div className="flex flex-wrap">
-                                    {prorileData.Interests.map((interest) => (
-                                        <p key={interest.ID} className="badge">{interest.Name}</p>
-                                    ))}
-                                </div>
-                            )}
+            <div className='pt-3'>
+                {connectionType.map((type) => {
+                    const viewClass = cardData[type as keyof Connections].length > 0 ? "view" : "empty";
+                    return (
+                        <div className={`category-box ${viewClass}`}
+                            data-category={type.toLowerCase()} key={type}>
+                            <div className='category-title'>
+                                <h1>{type} You</h1>
+                                {/* <Button className='close' label="close" onClick={() => {  }} /> */}
+                                <button className='empty'>-</button>
+                                <button className='close' onClick={togglelist(type.toLowerCase())}>Close</button>
+                                <button className='open' onClick={togglelist(type.toLowerCase())}>Open</button>
+                            </div>
+                            <div className='category-content'>
+                                {cardData[type as keyof Connections].map((card) => (
+                                    <div className='card' key={card.UserID} onClick={() => openProfile(card.UserID)}>
+                                        <div className='card-header'>
+                                        </div>
+                                        <div className='card-body'>
+                                            <div className='card-thumbnail'>
+                                                <img src={'http://localhost:3000/uploads/' + card.ProfilePic} alt='thumbnail' />
+                                            </div>
+                                            <div className='card-title'>
+                                                <h2>{card.Username}</h2>
+                                                <h4>Fames: {card.Fames}</h4>
+                                            </div>
+                                            <div className='card-interests'>
+                                                {card.Interests && card.Interests.map((interest) => (
+                                                    <span key={interest.ID}>{interest.Name}</span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                    <div className="flex flex-wrap justify-center">
-                        { prorileData.Matched && <Button label="Chat" onClick={() => handleNavigation('chat')} />}
-                        { prorileData.Matched && <Button label="Unlike" onClick={() => ActionButton(prorileData.UserID, 'unlike')} />}
-                        { !prorileData.Matched && <Button label="Like" onClick={() => ActionButton(prorileData.UserID, 'like')} />}
-                        <Button label="Report" onClick={() => ActionButton(prorileData.UserID, 'report')} />
-                    </div>
-                </div>
+                    )
+                })}
             </div>
+            <Profile 
+                profileData={profileData} 
+                openProfileModal={openProfileModal} 
+                setOpenProfileModal={setOpenProfileModal} 
+                fetchProfileData={fetchProfileData} 
+            />
+            
         </div>
     );
 };
