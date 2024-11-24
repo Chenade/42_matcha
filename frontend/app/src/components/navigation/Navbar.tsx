@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './page-navigation.css';
 
-export type PageTitle = 'page1 Title' | 'My Connections' | 'About Me' | 'Chats' | 'Date';
+export type PageTitle = 'page1 Title' | 'My Connections' | 'About Me' | 'Chats' | 'Dates';
 
 export const Navbar = ({
 	setPageTitle,
@@ -16,14 +16,14 @@ export const Navbar = ({
 			case '/explorer':
 				setPageTitle('page1 Title');
 				break;
-			case '/connection':
+			case '/connections':
 				setPageTitle('My Connections');
 				break;
-			case '/connection/chat':
+			case '/chats':
 				setPageTitle('Chats');
 				break;
-			case '/connection/date':
-				setPageTitle('Date');
+			case '/dates':
+				setPageTitle('Dates');
 				break;
 			case '/me':
 				setPageTitle('About Me');
@@ -57,8 +57,18 @@ export const Navbar = ({
 					/>
 					<NavbarMenuItem
 						onClickMenuItem={() => setPageTitle('My Connections')}
-						menuItemLabel="Connection"
-						pagePath="/connection"
+						menuItemLabel="Connections"
+						pagePath="/connections"
+					/>
+					<NavbarMenuItem
+						onClickMenuItem={() => setPageTitle('Chats')}
+						menuItemLabel="Chats"
+						pagePath="/chats"
+					/>
+					<NavbarMenuItem
+						onClickMenuItem={() => setPageTitle('Dates')}
+						menuItemLabel="Dates"
+						pagePath="/dates"
 					/>
 					<NavbarMenuItem
 						onClickMenuItem={() => setPageTitle('About Me')}
@@ -83,10 +93,17 @@ const NavbarMenuItem = ({
 }: {
 	menuItemLabel: string;
 	pagePath: string;
-	onClickMenuItem: () => void;
+	onClickMenuItem: (e: React.MouseEvent<HTMLAnchorElement>) => void;
 }) => {
 	return (
-		<Link to={pagePath} className="nav_link" onClick={onClickMenuItem}>
+		<Link
+			to={pagePath}
+			className="nav_link"
+			onClick={(e) => {
+				e.stopPropagation(); // Prevent click from bubbling up to header
+				onClickMenuItem(e);
+			}}
+		>
 			{menuItemLabel}
 		</Link>
 	);
