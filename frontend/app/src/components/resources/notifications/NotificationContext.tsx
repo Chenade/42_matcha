@@ -1,8 +1,7 @@
-// NotificationContext.tsx
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useCallback } from 'react';
 
 interface Notification {
-  id: string; // Unique identifier for each notification
+  id: string;
   message: string;
   type?: string;
 }
@@ -18,11 +17,11 @@ const NotificationContext = createContext<NotificationContextType | undefined>(u
 export const NotificationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  const addNotification = (type: string, message: string) => {
+  const addNotification = useCallback((type: string, message: string) => {
     const id = Date.now().toString();
     setNotifications((prev) => [...prev, { id, message, type }]);
     setTimeout(() => removeNotification(id), 3000);
-  };
+  }, []);
 
   const removeNotification = (id: string) => {
     setNotifications((prev) => prev.filter((notification) => notification.id !== id));

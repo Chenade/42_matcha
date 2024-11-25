@@ -1,12 +1,15 @@
 package data
 
 import (
-	"fmt"
 	"encoding/json"
+	"fmt"
+	"log"
 	"net/http"
 	"strconv"
+
 	"goji.io/pat"
 
+	WS "api/srcs/websocket"
 )
 
 func ListConnectionsByUser(w http.ResponseWriter, r *http.Request) {
@@ -39,6 +42,12 @@ func AddViewRecord(w http.ResponseWriter, r *http.Request, id string) error{
 	return fmt.Errorf("invalid usrId")
 	}	
 	
+	if !WS.WsNotificationSend(
+		id,
+		"info", "Someone viewed your profile") {
+		log.Println("Error sending notification")
+	}	
+
 	if num_id != usr_id {
 		err = AddView(Views{
 			Who: usr_id,
@@ -48,7 +57,7 @@ func AddViewRecord(w http.ResponseWriter, r *http.Request, id string) error{
 			return err
 		}
 	}
-	
+
 	return nil
 }
 
@@ -110,9 +119,20 @@ func AddLikeRecord(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		json.NewEncoder(w).Encode("Matched")
+
+		if !WS.WsNotificationSend(
+			usrId,
+			"success", "You have a new match") {
+			log.Println("Error sending notification")
+		}
 		return
 	}
 
+	if !WS.WsNotificationSend(
+		usrId,
+		"info", "Someone liked you") {
+		log.Println("Error sending notification")
+	}	
 
 	json.NewEncoder(w).Encode("Like added")
 }
@@ -158,6 +178,12 @@ func RemoveLikeRecord(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+
+		if !WS.WsNotificationSend(
+			usrId,
+			"info", "A match has been removed") {
+			log.Println("Error sending notification")
+		}	
 	}
 	
 	json.NewEncoder(w).Encode("Like removed")

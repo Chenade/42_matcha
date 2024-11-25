@@ -2,10 +2,15 @@ package users
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
-	"goji.io/pat"
 	"strconv"
+
+	"goji.io/pat"
+
+	WS "api/srcs/websocket"
 )
+
 // get by id
 func GetInfo(w http.ResponseWriter, r *http.Request) {
 	who, err := strconv.Atoi(r.Header.Get("usrId"))
@@ -25,6 +30,12 @@ func GetInfo(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
+	}
+
+	if !WS.WsNotificationSend(
+		whom,
+		"info", "Someone viewed your profile") {
+		log.Println("Error sending notification")
 	}
 
 	json.NewEncoder(w).Encode(usr)
