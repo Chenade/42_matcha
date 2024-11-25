@@ -42,12 +42,6 @@ func AddViewRecord(w http.ResponseWriter, r *http.Request, id string) error{
 	return fmt.Errorf("invalid usrId")
 	}	
 	
-	if !WS.WsNotificationSend(
-		id,
-		"info", "Someone viewed your profile") {
-		log.Println("Error sending notification")
-	}	
-
 	if num_id != usr_id {
 		err = AddView(Views{
 			Who: usr_id,
