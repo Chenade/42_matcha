@@ -3,11 +3,14 @@ package users
 import (
 	"api/utils"
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/golang-jwt/jwt/v5"
 	"goji.io/pat"
+
+	WS "api/srcs/websocket"
 )
 
 // get by id
@@ -29,6 +32,12 @@ func GetInfo(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
+	}
+
+	if !WS.WsNotificationSend(
+		whom,
+		"info", "Someone viewed your profile") {
+		log.Println("Error sending notification")
 	}
 
 	json.NewEncoder(w).Encode(usr)

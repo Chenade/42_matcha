@@ -21,3 +21,10 @@ type Likes struct {
 	Created_at	time.Time	`json:"created_at"`
 	Username	string		`json:"username"`
 }
+
+type Matches struct {
+	ID          int     	`json:"id"`
+	User_1		int			`json:"user_1"`
+	User_2		int			`json:"user_2"`
+	Created_at	time.Time	`json:"created_at"`
+}

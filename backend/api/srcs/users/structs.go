@@ -42,7 +42,9 @@ type OtherUser struct {
 	Bio              *string `db:"bio"`
 	ProfilePictureID *int    `db:"profile_picture_id"`
 	ProfilePic	     string
+	Matched			 bool	 `db:"matched"`
 	Liked			 bool	 `db:"liked"`
+	Like			 bool	 `db:"like"`
 	Viewed			 bool	 `db:"viewed"`
 	// BirthDate        *string  `db:"birth_date"`
 	Pictures         []Images.UserPicture

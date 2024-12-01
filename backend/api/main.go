@@ -61,15 +61,16 @@ func main() {
 
 	userMux.HandleFunc(pat.Get("/connections"), data.ListConnectionsByUser)
 
-	userMux.HandleFunc(pat.Post("/likes/:usrId"), data.AddLikeRecord)
-	userMux.HandleFunc(pat.Delete("/likes/:usrId"), data.RemoveLikeRecord)
+	userMux.HandleFunc(pat.Post("/:usrId/like"), data.AddLikeRecord)
+	userMux.HandleFunc(pat.Post("/:usrId/unlike"), data.RemoveLikeRecord)
 
 	userMux.HandleFunc(pat.Post("/interests"), interests.AddToUser)
 	userMux.HandleFunc(pat.Delete("/interests"), interests.RemoveFromUser)
 
 	//websocket
 	httpMux := http.NewServeMux()
-	httpMux.HandleFunc("/ws", ws.WsHandler)
+	httpMux.HandleFunc("/ws/notification", ws.WsNotificationHandler)
+	httpMux.HandleFunc("/ws/chat/", ws.WsChatHandler)
 	httpMux.Handle("/", mux)
 
 	port := 3000
