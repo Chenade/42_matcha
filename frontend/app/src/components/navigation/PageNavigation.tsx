@@ -3,8 +3,23 @@ import './page-navigation.css';
 import { Outlet } from 'react-router-dom';
 import { Navbar } from './Navbar';
 import type { PageTitle } from './Navbar';
+import { useNotification } from '../resources/notifications/NotificationContext';
+import { websocketService } from '../resources/notifications/websocketService';
 
 export const PageNavigation = () => {
+
+    const { addNotification } = useNotification();
+  
+    useEffect(() => {
+      websocketService.connect((data: string) => {
+        const message = JSON.parse(data);
+        addNotification(message.type ?? "info", message.message);
+      });
+  
+      return () => {
+        websocketService.close();
+      };
+    }, [addNotification]);
 
     const [pageTitle, setPageTitle] = React.useState<PageTitle>('page1 Title');
 

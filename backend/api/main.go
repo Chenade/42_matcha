@@ -69,7 +69,8 @@ func main() {
 
 	//websocket
 	httpMux := http.NewServeMux()
-	httpMux.HandleFunc("/ws", ws.WsHandler)
+	httpMux.HandleFunc("/ws/notification", ws.WsNotificationHandler)
+	httpMux.HandleFunc("/ws/chat/", ws.WsChatHandler)
 	httpMux.Handle("/", mux)
 
 	port := 3000
