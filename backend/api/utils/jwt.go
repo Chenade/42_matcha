@@ -12,7 +12,7 @@ import (
 
 var jwtKey = []byte(os.Getenv("JWT_KEY"))
 
-func generateToken(userID uint) (string, error) {
+func GenerateToken(userID int) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256,
 		jwt.MapClaims{
 			"user_id": userID,
@@ -25,7 +25,7 @@ func generateToken(userID uint) (string, error) {
 }
 
 func VerifyToken(tokenString string) (jwt.MapClaims, error) {
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(tokenString, jwt.MapClaims{}, func(token *jwt.Token) (interface{}, error) {
 		// Check the signing method
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Invalid signing method")
@@ -48,13 +48,13 @@ func VerifyToken(tokenString string) (jwt.MapClaims, error) {
 
 type key int
 
-var claimsKey key
+var ClaimsKey key
 
 func SetJWTClaimsContext(ctx context.Context, claims jwt.MapClaims) context.Context {
-	return context.WithValue(ctx, claimsKey, claims)
+	return context.WithValue(ctx, ClaimsKey, claims)
 }
 
 func JWTClaimsFromContext(ctx context.Context) (jwt.MapClaims, bool) {
-	claims, ok := ctx.Value(claimsKey).(jwt.MapClaims)
+	claims, ok := ctx.Value(ClaimsKey).(jwt.MapClaims)
 	return claims, ok
 }

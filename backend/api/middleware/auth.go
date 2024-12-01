@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -46,14 +47,14 @@ func AuthMiddleware(next http.Handler) http.Handler {
 func AuthenticateMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
-			tokenString, err := r.Cookie("token")
-			if err != nil {
-				log.Println("Error getting token cookie:", err)
+			tokenString := r.Header.Get("Authorization")
+			if tokenString == "" {
+				log.Println("No token provided")
 				http.Error(w, "Forbidden", http.StatusForbidden)
 				return
 			}
 
-			claims, err := utils.VerifyToken(tokenString.Value)
+			claims, err := utils.VerifyToken(tokenString)
 			if err != nil {
 				log.Println("Error verifying token:", err)
 				http.Error(w, "Unauthorized", http.StatusUnauthorized)
@@ -62,6 +63,19 @@ func AuthenticateMiddleware(next http.Handler) http.Handler {
 
 			log.Println("Token verified successfully. Claims: ", claims)
 			r = r.WithContext(utils.SetJWTClaimsContext(r.Context(), claims))
+			// fmt.Println("Claims set in context", r.Context().Value("claims"))
+			// fmt.Println("claimsKey set in context", r.Context().Value(utils.ClaimsKey))
+
+			// for key, val := range claims {
+			// 	fmt.Printf("Key: %v, value: %v\n", key, val)
+			// }
+
+			// fmt.Println("User ID:", claims["user_id"])
+			user_id_string := fmt.Sprintf("%v", claims["user_id"])
+			// fmt.Println("User ID:", user_id_string)
+
+			// TODO remove this and read user_id from context
+			r.Header.Set("usrId", user_id_string)
 			next.ServeHTTP(w, r)
 		})
 }

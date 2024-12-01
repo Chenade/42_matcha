@@ -5,7 +5,6 @@ import { RouterProvider } from 'react-router-dom';
 import router from './route';
 
 const App: React.FC = () => {
-    localStorage.setItem('token', '2');
     return (
         <RouterProvider router={router} />
     );

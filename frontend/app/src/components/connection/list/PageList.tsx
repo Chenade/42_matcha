@@ -45,7 +45,7 @@ export const PageList: React.FC = () => {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Authorization': localStorage.getItem('token') ?? "",
                     },
                 });
                 const data = await response.json();
@@ -68,7 +68,7 @@ export const PageList: React.FC = () => {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Authorization': localStorage.getItem('token') ?? "",
                     },
                 });
                 const data = await response.json();

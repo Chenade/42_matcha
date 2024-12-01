@@ -59,7 +59,7 @@ export const PageRegistration = () => {
     
         setErrors([]);
 
-        const response = await fetch('http://localhost:3000/sign-up', {
+        await fetch('http://localhost:3000/sign-up', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -71,16 +71,15 @@ export const PageRegistration = () => {
             last_name: lastName,
             password: password, // hash the password on the server side
           }),
-        });
-    
-        if (response.ok) {
-          alert('Registration successful! Please check your email to verify your account.');
-          // Redirect the user to the login page
+        }).then((response) => {
+            console.log('Response:', response);
+            alert('Registration successful! Please check your email to verify your account.');
+            // Redirect the user to the login page
             window.location.href = '/login';
-        } else {
-          const errorResponse = await response.json();
-          setErrors([errorResponse.message || 'Registration failed. Please try again.']);
-        }
+        }).catch((error) => {
+            console.log('Error:', error);
+            setErrors(['Registration failed. Please try again.']);
+        });
       };
     
       return (
@@ -156,4 +155,4 @@ export const PageRegistration = () => {
           </div>
         </div>
       );
-}
+};
