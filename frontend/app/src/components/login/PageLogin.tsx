@@ -16,6 +16,10 @@ export const PageLogin = () => {
             },
             body: JSON.stringify({ email: email, password: password }),
         }).then((response) => {
+            if (!response.ok) {
+                setErrors("Login failed. Please check your email and password.");
+                return;
+            }
             const token = response.headers.get('Authorization');
             localStorage.setItem("token", token || "");
             window.location.href = "/";
@@ -23,6 +27,8 @@ export const PageLogin = () => {
             console.log('Error:', error);
         });
     };
+
+    const [error, setErrors] = React.useState<string>();
 
   return (
     <div className="container">
@@ -42,6 +48,11 @@ export const PageLogin = () => {
                     onChange={(e) => setPassword(e.target.value)}
                 />
             </label>
+            <div className="errors">
+                    <p className="error">
+                        {error}
+                    </p>
+            </div>
             <button type="submit">Login</button>
         </form>
         <div className="links">

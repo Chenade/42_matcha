@@ -57,7 +57,7 @@ export const Profile = ({
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Authorization': localStorage.getItem('token') ?? "",
             },
             body: JSON.stringify({
                 user_id: user_id,

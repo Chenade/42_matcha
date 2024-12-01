@@ -54,12 +54,15 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	user_email := r.FormValue("email")
-	password := r.FormValue("password")
+	var _usr users.User
+	_ = json.NewDecoder(r.Body).Decode(&_usr)
+	user_email := _usr.Email
+	password := _usr.Password
 
 	var userID *int
 	err := database.DB.QueryRow("SELECT id FROM users WHERE email = $1 AND password = $2", user_email, password).Scan(&userID)
 	if err != nil {
+		log.Println("Error querying user:", err, "email:", user_email, "password:", password)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}

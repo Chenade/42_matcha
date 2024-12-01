@@ -73,6 +73,9 @@ export const PageRegistration = () => {
           }),
         }).then((response) => {
             console.log('Response:', response);
+            if (!response.ok) {
+                throw new Error('Registration failed. Please try again.');
+            }
             alert('Registration successful! Please check your email to verify your account.');
             // Redirect the user to the login page
             window.location.href = '/login';
