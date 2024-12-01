@@ -16,7 +16,7 @@ var DB *sqlx.DB
 
 func InitDB() error {
 	const (
-		dbhost     = "postgres" // Need to use the docker-compose container name, instead of localhost, see https://github.com/quay/clair/issues/134#issuecomment-491300639
+		dbhost     = "localhost" // Need to use the docker-compose container name, instead of localhost, see https://github.com/quay/clair/issues/134#issuecomment-491300639
 		dbport     = 5432
 		dbuser     = "postgres"
 		dbpassword = "123"

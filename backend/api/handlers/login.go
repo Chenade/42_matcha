@@ -1,16 +1,15 @@
-// handlers/handlers.go
-
 package handlers
 
 import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 
-	// "goji.io/pat"
 	"api/database"
 	users "api/srcs/users"
+	utils "api/utils"
 )
 
 type UserRegistration struct {
@@ -22,6 +21,7 @@ type UserRegistration struct {
 }
 
 func SignUp(w http.ResponseWriter, r *http.Request) {
+	log.Println("Sign up handler called, request:", r)
 	bytedata, _ := io.ReadAll(r.Body)
 	reqBodyString := string(bytedata)
 	// create a bodyOBject of type UserRegistration
@@ -44,28 +44,37 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("username:", username)
 	fmt.Println("first_name:", first_name)
 	if err != nil {
+		log.Println("Error inserting user:", err)
 		http.Error(w, err.Error(), 500)
 		return
 	}
 
-	fmt.Fprintf(w, "Signup")
+	fmt.Println("User created")
+	w.Write([]byte("User created"))
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	username_or_email := r.FormValue("account")
+	user_email := r.FormValue("email")
 	password := r.FormValue("password")
 
-	var found bool
-	err := database.DB.QueryRow("SELECT EXISTS(SELECT 1 FROM users WHERE (account = $1 OR email = $1) AND password = $2)", username_or_email, password).Scan(&found)
+	var userID *int
+	err := database.DB.QueryRow("SELECT id FROM users WHERE email = $1 AND password = $2", user_email, password).Scan(&userID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	if found {
-		fmt.Fprintf(w, "Login success")
-		// Todo: create session
+	if userID != nil {
+		jwtToken, err := utils.GenerateToken(*userID)
+		if err != nil {
+			log.Println("Error generating token:", err)
+			http.Error(w, "Error generating token", http.StatusInternalServerError)
+			return
+		}
+		http.Header.Add(w.Header(), "Authorization", jwtToken)
+		w.Write([]byte("Login success"))
 	} else {
+		log.Println(w, "Login failed")
 		http.Error(w, "Login failed", http.StatusBadRequest)
 	}
 }

@@ -7,7 +7,6 @@ import { NotificationProvider } from './components/resources/notifications/Notif
 import NotificationOverlay from './components/resources/notifications/NotificationOverlay';
 
 const App: React.FC = () => {
-    localStorage.setItem('token', '2');
     return (
         <NotificationProvider>
             <NotificationOverlay />

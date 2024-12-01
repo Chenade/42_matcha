@@ -14,9 +14,9 @@ import (
 
 	ws "api/srcs/websocket"
 
-	users "api/srcs/users"
-	interests "api/srcs/interests"
 	images "api/srcs/images"
+	interests "api/srcs/interests"
+	users "api/srcs/users"
 
 	data "api/srcs/data"
 )
@@ -37,18 +37,18 @@ func main() {
 
 	mux.Use(middleware.RequestLogger)
 	mux.Use(middleware.Https)
-	
+
 	mux.HandleFunc(pat.Get("/"), handlers.Index)
 	mux.HandleFunc(pat.Get("/hello/:name"), handlers.HelloName)
 
 	mux.HandleFunc(pat.Get("/users"), handlers.ListUsersHandler)
 	mux.HandleFunc(pat.Get("/interests"), interests.ListInterests)
-	
+
 	mux.HandleFunc(pat.Post("/sign-up"), handlers.SignUp)
 	mux.HandleFunc(pat.Post("/login"), handlers.Login)
 
 	userMux := goji.SubMux()
-	userMux.Use(middleware.AuthMiddleware)
+	userMux.Use(middleware.AuthenticateMiddleware)
 	mux.Handle(pat.New("/users/*"), userMux)
 
 	userMux.HandleFunc(pat.Get("/profile"), users.Profile)
@@ -60,7 +60,7 @@ func main() {
 	userMux.HandleFunc(pat.Post("/image/profile"), images.SetProfile)
 
 	userMux.HandleFunc(pat.Get("/connections"), data.ListConnectionsByUser)
-	
+
 	userMux.HandleFunc(pat.Post("/:usrId/like"), data.AddLikeRecord)
 	userMux.HandleFunc(pat.Post("/:usrId/unlike"), data.RemoveLikeRecord)
 

@@ -1,11 +1,13 @@
 package users
 
 import (
+	"api/utils"
 	"encoding/json"
 	"log"
 	"net/http"
 	"strconv"
 
+	"github.com/golang-jwt/jwt/v5"
 	"goji.io/pat"
 
 	WS "api/srcs/websocket"
@@ -17,7 +19,7 @@ func GetInfo(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		who = 0
 		return
-	}	
+	}
 
 	whom := pat.Param(r, "usrId")
 
@@ -45,13 +47,17 @@ func GetInfo(w http.ResponseWriter, r *http.Request) {
 
 // get own profile
 func Profile(w http.ResponseWriter, r *http.Request) {
-	usr_id, err := strconv.Atoi(r.Header.Get("usrId"))
-	if err != nil {
+	// usr_id, err := strconv.Atoi(r.Header.Get("usrId"))
+	// Get user id from context claims
+
+	usr_id := r.Context().Value(utils.ClaimsKey).(jwt.MapClaims)["user_id"]
+	usr_id_str := strconv.Itoa(int(usr_id.(float64)))
+	if usr_id == "" {
 		http.Error(w, "Invalid usrId", http.StatusBadRequest)
 		return
-	}	
+	}
 
-	usr, err := GetById(strconv.Itoa(usr_id))
+	usr, err := GetById(usr_id_str)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -66,10 +72,10 @@ func Update(w http.ResponseWriter, r *http.Request) {
 
 	var _usr User
 	err := json.NewDecoder(r.Body).Decode(&_usr)
-    if err != nil {
-        http.Error(w, "Invalid JSON body", http.StatusBadRequest)
-        return
-    }
+	if err != nil {
+		http.Error(w, "Invalid JSON body", http.StatusBadRequest)
+		return
+	}
 
 	_, err = UpdateById(_usr, usrId)
 

@@ -58,7 +58,7 @@ export const PageMyProfile = () => {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Authorization': localStorage.getItem('token') ?? "",
                 },
             });
             const data = await response.json();
@@ -138,7 +138,7 @@ export const PageMyProfile = () => {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    Authorization: localStorage.getItem('token') ?? "",
                 },
                 body: JSON.stringify(profile),
             });
@@ -167,7 +167,7 @@ export const PageMyProfile = () => {
             const response = await fetch('http://localhost:3000/users/image', {
                 method: 'POST',
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    Authorization: localStorage.getItem('token') ?? "",
                 },
                 body: formData,
             });
@@ -191,7 +191,7 @@ export const PageMyProfile = () => {
             const response = await fetch(`http://localhost:3000/users/image?imgId=${index}`, {
                 method: 'DELETE',
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    Authorization: localStorage.getItem('token') ?? "",
                 },
             });
 
@@ -218,7 +218,7 @@ export const PageMyProfile = () => {
             const response = await fetch(`http://localhost:3000/users/interests`, {
                 method: 'POST',
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    Authorization: localStorage.getItem('token') ?? "",
                 },
                 body: JSON.stringify({ name: value }),
             });
@@ -244,7 +244,7 @@ export const PageMyProfile = () => {
             const response = await fetch(`http://localhost:3000/users/interests`, {
                 method: 'DELETE',
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    Authorization: localStorage.getItem('token') ?? "",
                 },
                 body: JSON.stringify({ Name : value }),
             });
@@ -269,7 +269,7 @@ export const PageMyProfile = () => {
             const response = await fetch(`http://localhost:3000/users/image/profile?imgId=${index}`, {
                 method: 'POST',
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    Authorization: localStorage.getItem('token') ?? "",
                 },
             });
 

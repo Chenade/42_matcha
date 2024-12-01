@@ -9,23 +9,20 @@ export const PageLogin = () => {
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); // Prevents the default form submission behavior
-    try {
-      const response = await fetch("http://localhost:3000/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      // Save the token in the local storage
-      localStorage.setItem("token", data.token);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+   await fetch("http://localhost:3000/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email: email, password: password }),
+        }).then((response) => {
+            const token = response.headers.get('Authorization');
+            localStorage.setItem("token", token || "");
+            window.location.href = "/";
+        }).catch((error) => {
+            console.log('Error:', error);
+        });
+    };
 
   return (
     <div className="container">

@@ -10,7 +10,10 @@ require (
 	golang.org/x/net v0.17.0 // indirect
 )
 
-require google.golang.org/appengine v1.6.8 // indirect
+require (
+	github.com/golang-jwt/jwt/v5 v5.2.1 // indirect
+	google.golang.org/appengine v1.6.8 // indirect
+)
 
 require (
 	github.com/google/uuid v1.6.0
