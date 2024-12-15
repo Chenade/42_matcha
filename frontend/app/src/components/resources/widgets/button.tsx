@@ -4,15 +4,15 @@ export const Button = ({
     label,
     onClick,
     disabled,
-    className,
+    level,
 }: {
     label: string;
     onClick: () => void;
     disabled?: boolean;
-    className?: string;
+    level?: string;
 }) => {
     return (
-        <button className={`button ${className}`} onClick={onClick} {...(disabled ? { disabled: true } : {})}>
+        <button className={`button ${level}`} onClick={onClick} {...(disabled ? { disabled: true } : {})}>
             {label}
         </button>
     );
