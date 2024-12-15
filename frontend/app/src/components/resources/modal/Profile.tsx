@@ -107,9 +107,9 @@ export const Profile = ({
                 </div>
                 <div className="flex flex-wrap justify-center">
                     { profileData.Matched && <Button label="Chat" onClick={() => handleNavigation('chat')} />}
-                    { profileData.Like && <Button label="Unlike" onClick={() => ActionButton(profileData.UserID, 'unlike')} />}
+                    { profileData.Like && <Button label="Unlike" level="danger" onClick={() => ActionButton(profileData.UserID, 'unlike')} />}
                     { !profileData.Like && <Button label="Like" onClick={() => ActionButton(profileData.UserID, 'like')} />}
-                    <Button label="Report" onClick={() => ActionButton(profileData.UserID, 'report')} />
+                    <Button label="Report" level='warning' onClick={() => ActionButton(profileData.UserID, 'report')} />
                 </div>
             </div>
         </div>
