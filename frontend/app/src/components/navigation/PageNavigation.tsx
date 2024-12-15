@@ -4,14 +4,14 @@ import { Outlet } from 'react-router-dom';
 import { Navbar } from './Navbar';
 import type { PageTitle } from './Navbar';
 import { useNotification } from '../resources/notifications/NotificationContext';
-import { websocketService } from '../resources/notifications/websocketService';
+import { websocketService } from '../resources/websocketService';
 
 export const PageNavigation = () => {
 
     const { addNotification } = useNotification();
   
     useEffect(() => {
-      websocketService.connect((data: string) => {
+      websocketService.connect("ws://localhost:3000/ws/notification", (data: string) => {
         const message = JSON.parse(data);
         addNotification(message.type ?? "info", message.message);
       });
