@@ -126,7 +126,7 @@ func RemoveLike(like Likes) error {
 
 func GetMatches(match Matches) ([]Matches, error) {
 	var matches []Matches
-	err := database.DB.Select(&matches, "SELECT * FROM matches WHERE user_1 = $1 AND user_2 = $2", match.User_1, match.User_2)
+	err := database.DB.Select(&matches, "SELECT * FROM matches WHERE user_1 = $1 AND user_2 = $2 OR user_1 = $2 AND user_2 = $1", match.User_1, match.User_2)
 	if err != nil {
 		return []Matches{}, err
 	}
@@ -144,7 +144,7 @@ func AddMatch(match Matches) error {
 }
 
 func RemoveMatch(match Matches) error {
-	_, err := database.DB.NamedExec("DELETE FROM matches WHERE user_1 = :user_1 AND user_2 = :user_2", match)
+	_, err := database.DB.NamedExec("DELETE FROM matches WHERE user_1 = :user_1 AND user_2 = :user_2 OR user_1 = :user_2 AND user_2 = :user_1", match)
 	if err != nil {
 		return err
 	}

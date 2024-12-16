@@ -119,6 +119,11 @@ func AddLikeRecord(w http.ResponseWriter, r *http.Request) {
 			"success", "You have a new match") {
 			log.Println("Error sending notification")
 		}
+		if !WS.WsNotificationSend(
+			strconv.Itoa(num_id),
+			"success", "You have a new match") {
+			log.Println("Error sending notification")
+		}
 		return
 	}
 
@@ -164,6 +169,7 @@ func RemoveLikeRecord(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if len(likes) > 0 {
+		log.Println("Match found")
 		err = RemoveMatch(Matches{
 			User_1: usr_id,
 			User_2: num_id,
