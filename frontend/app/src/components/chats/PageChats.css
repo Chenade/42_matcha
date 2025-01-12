@@ -1,0 +1,240 @@
+.chat-page {
+    display: flex;
+    height: calc(100vh - 70px); /* Subtract header height */
+    overflow: hidden;
+}
+
+/* Chat List (Left Section) */
+.chat-page .chat-list {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #f0f0f0;
+    background-color: #fff;
+}
+
+.chat-list__search {
+    padding: 10px;
+    border-bottom: 1px solid #f0f0f0;
+    background-color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.chat-list__search input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+}
+
+/* Scrollable List Container */
+.chat-list__container {
+    flex: 1; /* Occupy remaining space */
+    overflow-y: auto;
+    padding-bottom: 1em;
+}
+
+.chat-list-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.chat-list-item:hover {
+    background-color: #f0f0f0;
+}
+
+.chat-item__avatar img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.chat-item__content .chat-item__name {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.chat-item__content .chat-item__message {
+    color: #666;
+    font-size: 0.9em;
+}
+
+/* Show All Button */
+.chat-list__show-all {
+    padding: 1em;
+    border-top: 1px solid #f0f0f0;
+    background-color: #fff;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    text-align: left;
+    height: 60px!important;
+}
+
+.chat-list__show-all button {
+    background: none;
+    border: none;
+    color: #007bff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.chat-list__show-all button:hover {
+    text-decoration: underline;
+}
+
+/* Chat Content (Right Section) */
+.chat-page .chat-content {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    background-color: #f9f9f9;
+}
+
+.chat-content__header {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    background-color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+}
+
+.chat-content__avatar img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.chat-content__name {
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+/* Scrollable Messages */
+.chat-content__messages {
+    flex: 1; /* Occupy remaining space */
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.chat-message {
+    margin-bottom: 10px;
+    display: flex;
+}
+
+.chat-message--right {
+    justify-content: flex-end;
+}
+
+.chat-message--left {
+    justify-content: flex-start;
+}
+
+.chat-message__content {
+    background-color: #e6f7ff;
+    border-radius: 10px;
+    padding: 10px;
+    max-width: 70%;
+    word-wrap: break-word;
+}
+
+.chat-message--right .chat-message__content {
+    background-color: #d9fdd3;
+}
+
+/* Input Box */
+.chat-message__input {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    background-color: #fff;
+    height: 60px!important;
+}
+
+.chat-message__input input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+    outline: none;
+}
+
+.chat-message__input button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.chat-message__input button:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+    .chat-page {
+        flex-direction: column;
+        height: calc(100vh - 60px);
+    }
+
+    /* Chat List takes full screen */
+    .chat-page .chat-list {
+        width: 100%;
+        height: 100%;
+    }
+
+    .chat-list__container {
+        flex: 1; /* Occupy vertical space */
+        overflow-y: auto;
+    }
+
+    /* Chat Content Hidden Initially */
+    .chat-page .chat-content {
+        display: none;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* Show Chat Content when toggled */
+    .chat-page.show-messages .chat-list {
+        display: none;
+    }
+
+    .chat-page.show-messages .chat-content {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .chat-content__messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 10px;
+    }
+
+    /* Back Button for Small Screens */
+    .back-button {
+        margin: 10px;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .back-button:hover {
+        background-color: #0056b3;
+    }
+}

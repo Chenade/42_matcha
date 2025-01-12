@@ -69,6 +69,7 @@ func main() {
 
 	//websocket
 	httpMux := http.NewServeMux()
+	// todo: add middleware to authenticate websocket connections, query params
 	httpMux.HandleFunc("/ws/notification", ws.WsNotificationHandler)
 	httpMux.HandleFunc("/ws/chat/", ws.WsChatHandler)
 	httpMux.Handle("/", mux)

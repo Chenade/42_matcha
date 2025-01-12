@@ -9,6 +9,7 @@ func Https(next http.Handler) http.Handler {
 		w.Header().Add("Content-Type", "application/json")
 
 		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Max-Age", "86400")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 		w.Header().Set("access-control-expose-headers", "Authorization")

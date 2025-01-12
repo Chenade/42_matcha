@@ -144,7 +144,7 @@ export const PageMyProfile = () => {
             });
 
             if (response.ok) {
-                const data = await response.json();
+                // const data = await response.json();
                 setOriginalProfile(profile); // Update originalProfile after saving
                 setUnsavedChanges(false);
                 addNotification('success', 'Profile saved successfully');
@@ -250,7 +250,7 @@ export const PageMyProfile = () => {
             });
 
             if (response.ok) {
-                const data = await response.json();
+                // const data = await response.json();
                 fetchProfile();
                 addNotification('success', 'Interest deleted successfully');
                 // console.log('Interest deleted successfully:', data);
@@ -274,7 +274,7 @@ export const PageMyProfile = () => {
             });
 
             if (response.ok) {
-                const data = await response.json();
+                // const data = await response.json();
                 fetchProfile();
                 addNotification('success', 'Profile picture set successfully');
                 // console.log('Profile picture set successfully:', data);
